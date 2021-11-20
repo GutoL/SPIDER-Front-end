@@ -13,7 +13,7 @@
 <mat-sidenav-container>
     <mat-sidenav #sidenav="matSidenav" class="mat-elevation-z8">
         <!-- <div>Icons made by <a href="" title="Triangle Squad">Triangle Squad</a> from <a href="https://www.flaticon.com/" title="Flaticon">www.flaticon.com</a></div>   -->
-        <img class="avatar" src="../../../assets/cobweb.png" width="150" height="150"/>
+        <img class="avatar" src="../../../assets/images/cobweb.png" width="150" height="150"/>
         <h4 class="name">SFC Management Tool</h4>
         
         <mat-divider></mat-divider>
@@ -39,8 +39,10 @@
     </mat-sidenav>
 
     <mat-sidenav-content>
-        <div class="content mat-elevation-z8">
-          <router-outlet></router-outlet>
+        <!-- <div class="content mat-elevation-z8"> -->
+        <div class="content">
+            <router-outlet></router-outlet>            
         </div>
-    </mat-sidenav-content>
+    </mat-sidenav-content>    
 </mat-sidenav-container>
+

@@ -1,0 +1,26 @@
+.new-button {
+    float: right;
+    margin-top: 10px;
+}
+
+.cancel-button{
+    margin-top: 10px;
+    float: right;
+    margin-right: 5px;
+}
+
+.content {
+    padding: 16px;
+}
+
+.content > mat-card-input {
+    width: 200px;
+    margin-right: 5px;
+    margin-left: 5px;
+}
+
+.input{
+    width: 10px;
+    margin-left: 5px;
+    margin-right: 5px;
+}

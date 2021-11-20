@@ -14,6 +14,20 @@ import { MatButtonModule } from '@angular/material/button';
 import { VnfCatalogComponent } from './components/vnf-catalog/vnf-catalog.component';
 import { SfcScreenComponent } from './components/sfc-screen/sfc-screen.component';
 import { SettingsScreenComponent } from './components/settings-screen/settings-screen.component';
+import {MatPaginatorModule} from '@angular/material/paginator';
+import { MatTableModule } from '@angular/material/table';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { CreateVnfComponent } from './components/vnf-catalog/create-vnf/create-vnf.component';
+import { HttpClientModule } from '@angular/common/http';
+import { FooterComponent } from './components/footer/footer.component'; 
+import { MatCardModule } from '@angular/material/card';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatSelectModule } from '@angular/material/select';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import {MatStepperModule} from '@angular/material/stepper';
+import { MatRadioModule } from '@angular/material/radio';
+
 
 @NgModule({
   declarations: [
@@ -22,19 +36,32 @@ import { SettingsScreenComponent } from './components/settings-screen/settings-s
     HomeComponent,
     VnfCatalogComponent,
     SfcScreenComponent,
-    SettingsScreenComponent
+    SettingsScreenComponent,
+    CreateVnfComponent,
+    FooterComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     AppRoutingModule,
-    BrowserAnimationsModule,
+    FlexLayoutModule,
     MatToolbarModule,
     MatSidenavModule,
     MatButtonModule,
     MatIconModule,
-    MatDividerModule
+    MatDividerModule,
+    MatPaginatorModule,
+    MatFormFieldModule,
+    MatTableModule,
+    MatInputModule,
+    HttpClientModule,
+    MatCardModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatSelectModule,
+    MatStepperModule,
+    MatRadioModule
   ],
   providers: [],
   bootstrap: [AppComponent]

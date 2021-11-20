@@ -1,0 +1,125 @@
+<div>
+<mat-card>
+    <mat-card-header>
+        <mat-card-title>
+            {{title_text}}
+        </mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+        <form [formGroup]="formVNF" (ngSubmit)="onSubmit()">
+
+            <div class="content">
+                <div fxLayout="row wrap" fxLayoutGap="16px grid">
+                    <mat-card class="mat-card-input">
+                        <div class="column">
+                            <mat-form-field>
+                                <input matInput placeholder="VNF Name" class="form-control" name="name" id="name" formControlName="name"/>
+                            </mat-form-field>                
+                        </div>
+                    </mat-card>
+                    
+                    <mat-card class="mat-card-input">
+                        <div class="column">
+                            <mat-form-field>
+                                <input matInput type="number" placeholder="CPU" class="form-control" name="cpu" id="cpu" formControlName="cpu" min="1" max="5"/>
+                                <!-- <mat-form-field appearance="fill">
+                                    <mat-label>CPU</mat-label>
+                                    <mat-select formControlName="cpu" name="cpu">
+                                        <mat-option *ngFor="let element of cpu_list" [value]="element">
+                                        {{element}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field> -->
+                            </mat-form-field>                
+                        </div>
+                    </mat-card>
+                    
+                    <mat-card class="mat-card-input">
+                        <div class="column">
+                            <mat-form-field>
+                                <input matInput type="number" placeholder="Memory" class="form-control" name="memory" id="memory" formControlName="memory" min="1" max="5"/>
+                                <!-- <mat-form-field appearance="fill">
+                                    <mat-label>Memory (in GB)</mat-label>
+                                    <mat-select formControlName="memory" name="memory">
+                                        <mat-option *ngFor="let element of memory_list" [value]="element">
+                                        {{element}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field> -->
+                            </mat-form-field>                
+                        </div>
+                    </mat-card>
+                    
+                    <mat-card class="mat-card-input">
+                        <div class="column">
+                            <mat-form-field>
+                                <input matInput type="number" placeholder="Storage" class="form-control" name="storage" id="storage" formControlName="storage" min="1" max="5"/>
+                                <!-- <mat-form-field appearance="fill">
+                                    <mat-label>Storage (in GB)</mat-label>
+                                    <mat-select formControlName="storage" name="storage">
+                                        <mat-option *ngFor="let element of storage_list" [value]="element">
+                                        {{element}}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field> -->
+                            </mat-form-field>                
+                        </div>
+                    </mat-card>
+                    
+                    <mat-card class="mat-card-input">
+                        <div class="column">
+                            <mat-form-field>
+                                <input matInput type="number" placeholder="mttf" class="form-control" name="mttf" id="mttf" formControlName="mttf" min="0.0001" max="10000"/>                                
+                            </mat-form-field>                
+                        </div>
+                    </mat-card>
+                    
+                    <mat-card class="mat-card-input">
+                        <div class="column">
+                            <mat-form-field>
+                                <input matInput type="number" placeholder="mttr" class="form-control" name="mttf" id="mttr" formControlName="mttr" min="0.0001" max="10000"/>
+                            </mat-form-field>                
+                        </div>
+                    </mat-card>
+                    
+                    <mat-card class="mat-card-input">
+                        <div class="column">
+                            <mat-form-field>
+                                <input matInput type="number" placeholder="availability" class="form-control" name="availability" id="availability" formControlName="availability" min="0.01" max="1"/>
+                            </mat-form-field>                
+                        </div>
+                    </mat-card>
+
+                    <mat-card class="mat-card-input">
+                        <div class="column">
+                            <mat-form-field>
+                                <input matInput type="string" placeholder="path_to_files" class="form-control" name="path_to_files" id="path_to_files" formControlName="path_to_files"/>
+                            </mat-form-field>                
+                        </div>
+                    </mat-card>
+                </div>
+            </div>
+
+            <form>
+                <h4 style="color:black">If you wish, select a VNF flavour:</h4>
+                <mat-form-field appearance="fill">
+                <mat-label>VNF Flavours</mat-label>
+                <mat-select [(ngModel)]="flavour_selected" name="flavour" (selectionChange)="onChange()">
+                    <mat-option *ngFor="let flavour of flavours" [value]="flavour.name">
+                    {{flavour.name}}
+                    </mat-option>
+                </mat-select>
+                </mat-form-field>
+            </form>
+
+            <div fxLayout="row" fxLayoutAlign="end center" >
+                <button mat-raised-button color="warn" class="cancel-button" (click)="cancel_update()">cancel</button>
+                <button mat-raised-button type="submit" class="spider-button new-button">{{create_button_text}}</button>
+            </div>
+        </form>
+
+    </mat-card-content>
+
+</mat-card>
+</div>

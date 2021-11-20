@@ -1,0 +1,21 @@
+* {
+    font-size: large;
+    /* color: black; */
+}
+
+.new-button {
+    float: right;
+    margin-top: 10px;
+}
+
+.cancel-button{
+    margin-top: 10px;
+    float: right;
+    margin-right: 5px;
+}
+
+
+
+::ng-deep .mat-step-header .mat-step-icon-selected {
+    background-color: #381846; 
+}

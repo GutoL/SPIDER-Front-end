@@ -1,0 +1,70 @@
+{
+  "vnfs": [
+    {
+      "name": "IDS",
+      "id": "0",
+      "cpu": 1,
+      "memory": 1,
+      "storage": 1,
+      "mttf": 1,
+      "mttr": 1,
+      "availability": 1,
+      "path_to_files": "/home/catalog/ids"
+    },
+    {
+      "name": "Firewall",
+      "id": "1",
+      "cpu": 1,
+      "memory": 1,
+      "storage": 1,
+      "mttf": 1,
+      "mttr": 1,
+      "availability": 1,
+      "path_to_files": "/home/catalog/firewall"
+    },
+    {
+      "name": "Compress",
+      "id": "2",
+      "cpu": 1,
+      "memory": 1,
+      "storage": 1,
+      "mttf": 1,
+      "mttr": 1,
+      "availability": 1,
+      "path_to_files": "/home/catalog/compress"
+    },
+    {
+      "name": "drawio",
+      "id": "LsYG_zk",
+      "cpu": 2,
+      "memory": 2,
+      "storage": 20,
+      "mttf": 100,
+      "mttr": 10,
+      "availability": 0.99,
+      "path_to_files": "/home/guto"
+    },
+    {
+      "name": "Test",
+      "id": "44HFqrM",
+      "cpu": 2,
+      "memory": 2,
+      "storage": 20,
+      "mttf": 100,
+      "mttr": 10,
+      "availability": 0.99,
+      "path_to_files": "/home/guto"
+    },
+    {
+      "name": "test2",
+      "id": "xKJHo_d",
+      "cpu": 1,
+      "memory": 1,
+      "storage": 10,
+      "mttf": 100,
+      "mttr": 10,
+      "availability": 0.99,
+      "path_to_files": "/home/guto"
+    }
+  ]
+}

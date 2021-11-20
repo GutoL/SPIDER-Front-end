@@ -1,1 +1,55 @@
-<p>sfc-screen works!</p>
+<div>
+
+<button color="#381846" mat-icon-button class="spider-purple" matTooltip="Clear all steps"(click)="onRemoveAll()">
+    <mat-icon>delete</mat-icon>
+</button>
+
+    <!-- <form (ngSubmit)="onSubmit()" (change)="changeStep($event, i)"> -->
+    <form (ngSubmit)="onSubmit()">
+
+        <mat-horizontal-stepper [linear]="true" #stepper>
+        <mat-step *ngFor="let step of newSteps; let i = index">
+            <ng-template matStepLabel>{{step.name || 'Configure the VNF'}} 
+                <mat-icon style="vertical-align:middle" (click)="removeStep(i)" 
+                *ngIf="step.name != 'Source'"> highlight_off </mat-icon>
+            </ng-template>
+            
+            <form fxLayout="column" [formGroup]="form_group_list[i]" (change)="changeStep(i)">
+
+                <mat-form-field appearance="fill" *ngIf="step.name != 'Source'">
+                    <mat-label>VNF Type</mat-label>
+                    <mat-select name="vnf" formControlName="name" (selectionChange)="changeStep(i)">
+                        <mat-option *ngFor="let element of vnf_list" [value]="element.name">
+                        {{element.name}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field class="example-full-width" appearance="fill">
+                    <mat-label>Bandwidth requirement (in MiB/s)</mat-label>
+                    <input matInput type="number" placeholder="Bandwidth requirement" formControlName="bandwidth" value="10">
+                </mat-form-field>
+
+            </form>   
+
+        </mat-step>
+        
+        <mat-step>
+            <ng-template matStepLabel>
+            <button mat-button (click)="addItem()">       
+            Add a VNF
+            </button>
+            </ng-template>
+        </mat-step>
+
+        </mat-horizontal-stepper>
+
+        <div fxLayout="row" fxLayoutAlign="end center" >
+            <button mat-raised-button color="warn" class="cancel-button" (click)="cancel_update()">cancel</button>
+            <button mat-raised-button type="submit" class="spider-button new-button">ok</button>
+        </div>
+    </form>
+
+</div>
+
+
