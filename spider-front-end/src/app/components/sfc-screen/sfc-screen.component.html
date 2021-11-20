@@ -7,7 +7,7 @@
     <!-- <form (ngSubmit)="onSubmit()" (change)="changeStep($event, i)"> -->
     <form (ngSubmit)="onSubmit()">
 
-        <mat-horizontal-stepper [linear]="true" #stepper>
+        <mat-vertical-stepper [linear]="true" #stepper>
         <mat-step *ngFor="let step of newSteps; let i = index">
             <ng-template matStepLabel>{{step.name || 'Configure the VNF'}} 
                 <mat-icon style="vertical-align:middle" (click)="removeStep(i)" 
@@ -42,7 +42,14 @@
             </ng-template>
         </mat-step>
 
-        </mat-horizontal-stepper>
+        </mat-vertical-stepper>
+
+        <div class="my-google-map">
+            <google-map [options]="mapOptions">
+                <map-marker *ngFor="let marker of markers" [position]="marker.position"></map-marker>
+                <map-polyline [options]="polylineOptions"></map-polyline>
+            </google-map>
+        </div>
 
         <div fxLayout="row" fxLayoutAlign="end center" >
             <button mat-raised-button color="warn" class="cancel-button" (click)="cancel_update()">cancel</button>

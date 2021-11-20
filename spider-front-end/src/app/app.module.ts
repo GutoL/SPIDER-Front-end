@@ -27,6 +27,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import {MatStepperModule} from '@angular/material/stepper';
 import { MatRadioModule } from '@angular/material/radio';
+import { GoogleMapsModule } from '@angular/google-maps';
 
 
 @NgModule({
@@ -61,7 +62,8 @@ import { MatRadioModule } from '@angular/material/radio';
     ReactiveFormsModule,
     MatSelectModule,
     MatStepperModule,
-    MatRadioModule
+    MatRadioModule,
+    GoogleMapsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

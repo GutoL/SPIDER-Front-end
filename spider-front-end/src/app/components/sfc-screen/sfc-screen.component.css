@@ -14,7 +14,10 @@
     margin-right: 5px;
 }
 
-
+.my-google-map > map.map-container{
+    width: 800px;
+    height: 600px;
+}
 
 ::ng-deep .mat-step-header .mat-step-icon-selected {
     background-color: #381846; 
