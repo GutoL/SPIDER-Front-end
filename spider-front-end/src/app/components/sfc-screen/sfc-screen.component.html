@@ -1,6 +1,6 @@
 <div>
 
-<button color="#381846" mat-icon-button class="spider-purple" matTooltip="Clear all steps"(click)="onRemoveAll()">
+<button color="#381846" mat-icon-button class="spider-button" matTooltip="Clear all steps"(click)="onRemoveAll()">
     <mat-icon>delete</mat-icon>
 </button>
 
@@ -36,25 +36,41 @@
         
         <mat-step>
             <ng-template matStepLabel>
-            <button mat-button (click)="addItem()">       
-            Add a VNF
+            <button mat-button class="spider-button" (click)="addItem()">       
+            Add a VNF <mat-icon>add</mat-icon>
             </button>
             </ng-template>
         </mat-step>
 
         </mat-vertical-stepper>
 
-        <div class="my-google-map">
-            <google-map [options]="mapOptions">
-                <map-marker *ngFor="let marker of markers" [position]="marker.position"></map-marker>
-                <map-polyline [options]="polylineOptions"></map-polyline>
-            </google-map>
-        </div>
+        <h3 style="color:black;">Please, select the source and destinaton of of SFC request in the map:</h3>
+        <div fxLayout="row">
+            <div class="my-google-map">
+                <google-map [options]="mapOptions">
+                    <map-marker #markerElem *ngFor="let marker of markers" [position]="marker.position"
+                    (mapClick)="clickMarker(marker)"></map-marker>
+                    <map-polyline [options]="polylineOptions"></map-polyline>
+                </google-map>            
+            </div>
+            
+            <div fxLayout="column">
+                <button *ngIf="show_source_button" color="#381846" mat-raised-button 
+                class="spider-button node_button" (click)="remove_source_node()">
+                    {{source_button_text}} <mat-icon>highlight_off</mat-icon>
+                </button>
+                <button *ngIf="show_destination_button" color="#381846" mat-raised-button 
+                    class="spider-button node_button" (click)="remove_destination_node()">
+                    {{destination_button_text}}<mat-icon>highlight_off</mat-icon>
+                </button>
+            </div>
+        </div>        
 
         <div fxLayout="row" fxLayoutAlign="end center" >
             <button mat-raised-button color="warn" class="cancel-button" (click)="cancel_update()">cancel</button>
             <button mat-raised-button type="submit" class="spider-button new-button">ok</button>
         </div>
+
     </form>
 
 </div>

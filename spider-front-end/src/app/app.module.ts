@@ -28,6 +28,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import {MatStepperModule} from '@angular/material/stepper';
 import { MatRadioModule } from '@angular/material/radio';
 import { GoogleMapsModule } from '@angular/google-maps';
+import { ReplaceNodeDialogComponent } from './components/sfc-screen/replace-node-dialog/replace-node-dialog.component';
 
 
 @NgModule({
@@ -39,7 +40,8 @@ import { GoogleMapsModule } from '@angular/google-maps';
     SfcScreenComponent,
     SettingsScreenComponent,
     CreateVnfComponent,
-    FooterComponent
+    FooterComponent,
+    ReplaceNodeDialogComponent
   ],
   imports: [
     BrowserModule,

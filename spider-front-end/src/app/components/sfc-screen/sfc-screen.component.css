@@ -22,3 +22,8 @@
 ::ng-deep .mat-step-header .mat-step-icon-selected {
     background-color: #381846; 
 }
+
+.node_button{
+    margin-bottom: 5px;
+    margin-left: 5px;
+}

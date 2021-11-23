@@ -4,7 +4,7 @@ import { Vnf } from 'src/app/models/vnf';
 import { VnfService } from 'src/app/services/vnf.service';
 import { Router } from '@angular/router';
 import { GoogleMap } from '@angular/google-maps';
-
+import { MapInfoWindow, MapMarker} from '@angular/google-maps';
 
 class Step{
   name: string;
@@ -18,8 +18,9 @@ class Step{
   styleUrls: ['./sfc-screen.component.css']
 })
 export class SfcScreenComponent implements OnInit {
-  // @ViewChild(GoogleMap) map: GoogleMap;
+  
   @ViewChild(GoogleMap, { static: false }) map: GoogleMap;
+  @ViewChild(MapInfoWindow, { static: false }) infoWindow: MapInfoWindow
 
   form_group_list: FormGroup[] = [];
 
@@ -32,6 +33,14 @@ export class SfcScreenComponent implements OnInit {
   
   newSteps: Step[] = [];
 
+  source_node: number = -1;
+  show_source_button = false;
+  source_button_text: string;
+  
+  destination_node: number = -1;
+  show_destination_button = false;
+  destination_button_text: string;
+
   // maps tutorial: https://medium.com/swlh/angular-google-map-component-basics-and-tips-7ff679e383ff
   // https://timdeschryver.dev/blog/google-maps-as-an-angular-component#googlemap
 
@@ -40,16 +49,29 @@ export class SfcScreenComponent implements OnInit {
       disableDefaultUI: true,
   }
 
-  marker_london = { position: { lat: 51.523181508616624, lng: -0.12909595901958482 } };
-  marker_LA = { position: { lat: 34.04633676302544, lng: -118.29779261974802 } };
-  marker_recife = { position: { lat: -8.052348087207431, lng: -34.88293029716518 } };
+  marker_london = { 
+    position: { lat: 51.523181508616624, lng: -0.12909595901958482 }, 
+    name:"London", 
+    id: 0,
+    label: {color: 'blue'} 
+  };
+
+  marker_LA = { position: { lat: 34.04633676302544, lng: -118.29779261974802 }, 
+                name: "Los Angeles", 
+                id: 1,
+                label: {color: 'red'} 
+              };
+  marker_recife = { position: { lat: -8.052348087207431, lng: -34.88293029716518 }, 
+                    name: "Recife", id: 2, 
+                  label: {color: 'red'} 
+                };
 
 
   markers = [this.marker_london, this.marker_LA, this.marker_recife];
   
   polylineOptions = {
     path: Array(),
-    strokeColor: '#32a1d0',
+    strokeColor: "#32a1d0",
     strokeOpacity: 1.0,
     strokeWeight: 2,
   };
@@ -112,7 +134,8 @@ export class SfcScreenComponent implements OnInit {
     
     // this.sfc.vnfs[i].bandwidth = this.form_group_list[i].value.bandwidth;
 
-    // this.newSteps[i].name = this.form_group_list[i].value.name;
+    this.newSteps[i].name = this.form_group_list[i].value.name;
+    this.newSteps[i].bandwidth = this.form_group_list[i].value.bandwidth;
     
   }
 
@@ -155,6 +178,33 @@ export class SfcScreenComponent implements OnInit {
     const bounds = { north, south, east, west };
   
     return bounds;
+  }
+
+  clickMarker(marker: any) {
+    console.log(marker);
+    if (this.source_node == -1){ // if the source is not defined
+      this.source_node = marker.id;
+      this.source_button_text = "source node: "+marker.name;
+      this.show_source_button = true;
+    }
+    else if (this.destination_node == -1){ // if destination is not defined
+      this.destination_node = marker.id;
+      this.destination_button_text = "destination node: "+marker.name;
+      this.show_destination_button = true;
+    }
+    else{ // if source and destination are defined
+      console.log(this.source_node, this.destination_node);
+    }
+  }
+
+  remove_source_node(){
+    this.source_node = -1;
+    this.show_source_button = false;
+  }
+
+  remove_destination_node(){
+    this.destination_node = -1;
+    this.show_destination_button = false;
   }
 
 }
