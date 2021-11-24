@@ -4,7 +4,10 @@ import { Vnf } from 'src/app/models/vnf';
 import { VnfService } from 'src/app/services/vnf.service';
 import { Router } from '@angular/router';
 import { GoogleMap } from '@angular/google-maps';
-import { MapInfoWindow, MapMarker} from '@angular/google-maps';
+import { MapInfoWindow} from '@angular/google-maps';
+import {MatDialog} from '@angular/material/dialog';
+import {ReplaceNodeDialogComponent} from 'src/app/components/sfc-screen/replace-node-dialog/replace-node-dialog.component';
+import {SfcRequestService} from 'src/app/services/sfc-request.service';
 
 class Step{
   name: string;
@@ -33,11 +36,9 @@ export class SfcScreenComponent implements OnInit {
   
   newSteps: Step[] = [];
 
-  source_node: number = -1;
   show_source_button = false;
   source_button_text: string;
   
-  destination_node: number = -1;
   show_destination_button = false;
   destination_button_text: string;
 
@@ -76,9 +77,8 @@ export class SfcScreenComponent implements OnInit {
     strokeWeight: 2,
   };
 
-  constructor(private vnf_service: VnfService, private router: Router) {
-     
-  }
+  constructor(private vnf_service: VnfService, private sfc_request_service: SfcRequestService,
+              private router: Router, public dialog: MatDialog) {}
 
   ngAfterViewInit(){
     const bounds = this.getBounds(this.markers);
@@ -181,30 +181,44 @@ export class SfcScreenComponent implements OnInit {
   }
 
   clickMarker(marker: any) {
-    console.log(marker);
-    if (this.source_node == -1){ // if the source is not defined
-      this.source_node = marker.id;
+    // console.log(marker);
+    if (this.sfc_request_service.source_node == -1){ // if the source is not defined
+      this.sfc_request_service.source_node = marker.id;
       this.source_button_text = "source node: "+marker.name;
       this.show_source_button = true;
     }
-    else if (this.destination_node == -1){ // if destination is not defined
-      this.destination_node = marker.id;
+
+    else if (this.sfc_request_service.destination_node == -1){ // if destination is not defined
+      this.sfc_request_service.destination_node = marker.id;
       this.destination_button_text = "destination node: "+marker.name;
       this.show_destination_button = true;
     }
+
     else{ // if source and destination are defined
-      console.log(this.source_node, this.destination_node);
+      // console.log(this.source_node, this.destination_node);
+      this.sfc_request_service.temp_node = marker.id;
+      this.dialog.open(ReplaceNodeDialogComponent); // the code is not wating the selection of the new node
+
+      console.log(this.markers[this.sfc_request_service.destination_node].name);
+      
+      this.source_button_text = "source node:" + this.markers[this.sfc_request_service.source_node].name;
+      this.destination_button_text = "destination node:" + this.markers[this.sfc_request_service.destination_node].name;      
+      
+      console.log('se liga',this.sfc_request_service.destination_node);
+      console.log(this.markers[this.sfc_request_service.destination_node].name);      
     }
   }
 
   remove_source_node(){
-    this.source_node = -1;
+    this.sfc_request_service.source_node = -1;
     this.show_source_button = false;
   }
 
   remove_destination_node(){
-    this.destination_node = -1;
+    this.sfc_request_service.destination_node = -1;
     this.show_destination_button = false;
   }
+
+
 
 }

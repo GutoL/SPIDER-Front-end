@@ -1,1 +1,11 @@
-<p>replace-node-dialog works!</p>
+<h1 mat-dialog-title>Do you wish to replace what node?</h1>
+
+<mat-radio-group aria-label="" [(ngModel)]="node_chosen">
+    <mat-radio-button value="source">Source</mat-radio-button>
+    <mat-radio-button value="destination">Destination</mat-radio-button>
+</mat-radio-group>
+
+<div mat-dialog-actions>
+  <button mat-button mat-dialog-close class="spider-button">cancel</button>
+  <button mat-button mat-dialog-close (click)="select()">ok</button>
+</div>

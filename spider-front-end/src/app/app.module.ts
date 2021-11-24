@@ -29,7 +29,7 @@ import {MatStepperModule} from '@angular/material/stepper';
 import { MatRadioModule } from '@angular/material/radio';
 import { GoogleMapsModule } from '@angular/google-maps';
 import { ReplaceNodeDialogComponent } from './components/sfc-screen/replace-node-dialog/replace-node-dialog.component';
-
+import { MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
   declarations: [
@@ -65,7 +65,8 @@ import { ReplaceNodeDialogComponent } from './components/sfc-screen/replace-node
     MatSelectModule,
     MatStepperModule,
     MatRadioModule,
-    GoogleMapsModule
+    GoogleMapsModule,
+    MatDialogModule
   ],
   providers: [],
   bootstrap: [AppComponent]
