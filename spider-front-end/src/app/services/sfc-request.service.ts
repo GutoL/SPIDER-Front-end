@@ -1,16 +1,77 @@
 import { Injectable } from '@angular/core';
+import { Observable, of, throwError} from 'rxjs';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { retry, catchError } from 'rxjs/operators';
+import { Config } from '../models/config';
+import { SfcRequest } from '../models/sfc-request';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SfcRequestService {
 
-  source_node: number;
-  destination_node: number;
-  temp_node: number;
+  // Headers
+  httpOptions = {
+    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+  }
+  
+  server_url = "";
 
-  constructor() {
-    this.source_node = -1;
-    this.destination_node = -1;
-   }
+  constructor(private httpClient: HttpClient) {
+    this.server_url = Config.server_ip+":"+Config.server_port+"/sfcs_requests";
+  }
+
+  get_sfc_resquests(): Observable<SfcRequest[]>{
+    return this.httpClient.get<SfcRequest[]>(this.server_url)
+      .pipe(
+        retry(2),
+        catchError(this.handleError))
+  }
+
+  get_sfc_resquests_by_id(id: number): Observable<SfcRequest> {
+    return this.httpClient.get<SfcRequest>(this.server_url + '/' + id)
+      .pipe(
+        retry(2),
+        catchError(this.handleError)
+      )
+  }
+
+  create_sfc_resquest(sfc_request: SfcRequest): Observable<SfcRequest> {
+    console.log(sfc_request);
+    return this.httpClient.post<SfcRequest>(this.server_url, JSON.stringify(sfc_request), this.httpOptions)
+      .pipe(
+        retry(2),
+        catchError(this.handleError)
+      )
+  }
+
+  update_sfc_resquest(sfc_request: SfcRequest): Observable<SfcRequest> {
+    return this.httpClient.put<SfcRequest>(this.server_url + '/' + sfc_request.id, JSON.stringify(sfc_request), this.httpOptions)
+      .pipe(
+        retry(1),
+        catchError(this.handleError)
+      )
+  }
+
+  delete_sfc_resquest(vnf: SfcRequest) {
+    return this.httpClient.delete<SfcRequest>(this.server_url + '/' + vnf.id, this.httpOptions)
+      .pipe(
+        retry(1),
+        catchError(this.handleError)
+      )
+  }
+
+  handleError(error: HttpErrorResponse) {
+    let errorMessage = '';
+    if (error.error instanceof ErrorEvent) {
+      // An error occured at the client side
+      errorMessage = error.error.message;
+    } else {
+      // An error occured at the server side
+      errorMessage = `Error code: ${error.status}, ` + `message: ${error.message}`;
+    }
+    console.log('ERROR:',errorMessage);
+    return throwError(errorMessage);
+  }  
+
 }

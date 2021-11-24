@@ -1,5 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-import {SfcRequestService} from 'src/app/services/sfc-request.service';
+import { Component, OnInit , Inject } from '@angular/core';
+// import {SfcRequestService} from 'src/app/services/sfc-request.service';
+// import { MAT_DIALOG_DATA } from "@angular/material/dialog";
+import { MatDialogRef } from "@angular/material/dialog";
+
+export interface DialogData {
+  animal: string;
+  name: string;
+}
 
 @Component({
   selector: 'app-replace-node-dialog',
@@ -10,20 +17,15 @@ export class ReplaceNodeDialogComponent implements OnInit {
 
   node_chosen: string;
 
-  constructor(private sfc_request_service: SfcRequestService) { }
+  constructor(
+              public dialogRef: MatDialogRef<ReplaceNodeDialogComponent>,
+              // @Inject(MAT_DIALOG_DATA) public data: DialogData
+              ) { }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   select(){
-    console.log(this.sfc_request_service.temp_node);
-    if (this.node_chosen == "source"){
-      this.sfc_request_service.source_node = this.sfc_request_service.temp_node;      
-    }
-    else{
-      this.sfc_request_service.destination_node = this.sfc_request_service.temp_node;
-      console.log('eeee',this.sfc_request_service.temp_node);
-    }
+    this.dialogRef.close(this.node_chosen);
   }
 
 }

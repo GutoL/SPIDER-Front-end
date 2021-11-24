@@ -7,12 +7,8 @@ import { GoogleMap } from '@angular/google-maps';
 import { MapInfoWindow} from '@angular/google-maps';
 import {MatDialog} from '@angular/material/dialog';
 import {ReplaceNodeDialogComponent} from 'src/app/components/sfc-screen/replace-node-dialog/replace-node-dialog.component';
-import {SfcRequestService} from 'src/app/services/sfc-request.service';
-
-class Step{
-  name: string;
-  bandwidth: number;
-}
+import { InfrastructureService} from "src/app/services/infrastructure.service";
+import { SfcRequest } from 'src/app/models/sfc-request';
 
 
 @Component({
@@ -21,7 +17,10 @@ class Step{
   styleUrls: ['./sfc-screen.component.css']
 })
 export class SfcScreenComponent implements OnInit {
-  
+
+  // maps tutorial: https://medium.com/swlh/angular-google-map-component-basics-and-tips-7ff679e383ff
+  // https://timdeschryver.dev/blog/google-maps-as-an-angular-component#googlemap
+    
   @ViewChild(GoogleMap, { static: false }) map: GoogleMap;
   @ViewChild(MapInfoWindow, { static: false }) infoWindow: MapInfoWindow
 
@@ -31,6 +30,10 @@ export class SfcScreenComponent implements OnInit {
   formGroup: FormGroup;
   form: FormArray;
   @ViewChild('stepper') stepper: any;
+
+  sfc_request: SfcRequest = {id: 0, name: "", VNFs: [], destination: "-1",
+                             source: "-1",flow_entries:[], 
+                             requirements:{availability:0.99}};
 
   vnf_list: Vnf[];
   
@@ -42,33 +45,10 @@ export class SfcScreenComponent implements OnInit {
   show_destination_button = false;
   destination_button_text: string;
 
-  // maps tutorial: https://medium.com/swlh/angular-google-map-component-basics-and-tips-7ff679e383ff
-  // https://timdeschryver.dev/blog/google-maps-as-an-angular-component#googlemap
-
   mapOptions: google.maps.MapOptions = {
       zoom : 14,
       disableDefaultUI: true,
   }
-
-  marker_london = { 
-    position: { lat: 51.523181508616624, lng: -0.12909595901958482 }, 
-    name:"London", 
-    id: 0,
-    label: {color: 'blue'} 
-  };
-
-  marker_LA = { position: { lat: 34.04633676302544, lng: -118.29779261974802 }, 
-                name: "Los Angeles", 
-                id: 1,
-                label: {color: 'red'} 
-              };
-  marker_recife = { position: { lat: -8.052348087207431, lng: -34.88293029716518 }, 
-                    name: "Recife", id: 2, 
-                  label: {color: 'red'} 
-                };
-
-
-  markers = [this.marker_london, this.marker_LA, this.marker_recife];
   
   polylineOptions = {
     path: Array(),
@@ -77,32 +57,44 @@ export class SfcScreenComponent implements OnInit {
     strokeWeight: 2,
   };
 
-  constructor(private vnf_service: VnfService, private sfc_request_service: SfcRequestService,
-              private router: Router, public dialog: MatDialog) {}
+  markers: Mark[] = [];
+
+  constructor(private vnf_service: VnfService, private router: Router, public dialog: MatDialog,
+              private infrastructure_service: InfrastructureService) {
+                                
+              }
+
+  
+  ngOnInit() {
+
+    this.sfc_request.source = "-1";
+    this.sfc_request.destination = "-1";
+
+    this.markers = this.infrastructure_service.get_nodes_makers();
+
+    this.get_vnfs();
+
+    let source = {name: "Source", bandwidth:10, cost: 1}
+    
+    this.newSteps.push(source);
+    this.form_group_list.push(this.create_form(source));
+
+    let links = this.infrastructure_service.get_links_markers();
+    for(let i in links){
+      this.polylineOptions.path.push(links[i]);
+    }
+  }
 
   ngAfterViewInit(){
     const bounds = this.getBounds(this.markers);
     this.map.fitBounds(bounds);
   }
   
-  ngOnInit() {
-    this.get_vnfs();
-
-    let source = {name: "Source", bandwidth:10 }
-    
-    this.newSteps.push(source);
-    this.form_group_list.push(this.create_form(source));
-
-    this.polylineOptions.path.push(this.marker_LA.position);
-    this.polylineOptions.path.push(this.marker_recife.position);
-    this.polylineOptions.path.push(this.marker_london.position);
-    this.polylineOptions.path.push(this.marker_LA.position);
-  }
-
   create_form(step: Step){
     let formGroup = new FormGroup({
       name: new FormControl(step.name),
-      bandwidth: new FormControl(step.bandwidth)
+      bandwidth: new FormControl(step.bandwidth),
+      cost: new FormControl(step.cost)
     });
     return formGroup;
   }
@@ -119,20 +111,14 @@ export class SfcScreenComponent implements OnInit {
 
   addItem() {
 
-    this.form_group_list.push(this.create_form({name:"",bandwidth:10}));
+    this.form_group_list.push(this.create_form({name:"",bandwidth:10, cost: 1}));
 
-    this.newSteps.push({ name: "", bandwidth: 10});
+    this.newSteps.push({ name: "", bandwidth: 10, cost: 1});
 
     this.stepper.selectedIndex = this.newSteps.length - 1;    
   }
 
   changeStep(i: number){
-
-    console.log(i);
-    console.log(this.form_group_list[i].value.name);
-    console.log(this.form_group_list[i].value.bandwidth);
-    
-    // this.sfc.vnfs[i].bandwidth = this.form_group_list[i].value.bandwidth;
 
     this.newSteps[i].name = this.form_group_list[i].value.name;
     this.newSteps[i].bandwidth = this.form_group_list[i].value.bandwidth;
@@ -141,10 +127,10 @@ export class SfcScreenComponent implements OnInit {
 
   onRemoveAll() {
     this.newSteps = [];
-    this.newSteps.push({ name: "Source", bandwidth:10 });
+    this.newSteps.push({ name: "Source", bandwidth:10, cost: 1 });
 
     this.form_group_list = [];
-    this.form_group_list.push(this.create_form({name: "Source", bandwidth:10 }));
+    this.form_group_list.push(this.create_form({name: "Source", bandwidth:10, cost: 1 }));
   }
 
   removeStep(i: number){
@@ -157,7 +143,37 @@ export class SfcScreenComponent implements OnInit {
   }
 
   onSubmit(){
-    console.log(this.newSteps);
+    if(this.newSteps.length == 1){
+      alert("Please, select at least one VNF!");
+    }
+    else if (this.sfc_request.source == "-1"){
+      alert("Please, select a source node in the map!");
+    }
+    else if (this.sfc_request.destination == "-1"){
+      alert("Please, select a destination node in the map!");
+    }
+    else{
+      for(let i=0; i < this.newSteps.length; i++){
+        
+        if (i < this.newSteps.length-1){
+          this.sfc_request.flow_entries.push({
+            source: this.newSteps[i].name,
+            destination: this.newSteps[i+1].name,
+            resources: {bandwidth: this.newSteps[i].bandwidth, cost: 1}
+          })
+        }
+
+        for (let j=0; j < this.vnf_list.length; j++){
+          if(this.newSteps[i].name == this.vnf_list[j].name){
+            this.sfc_request.VNFs.push(this.vnf_list[j]);
+            break            
+          }
+        }        
+      }
+    }
+
+    console.log(this.sfc_request);
+
   }
 
   getBounds(markers: any){
@@ -181,44 +197,63 @@ export class SfcScreenComponent implements OnInit {
   }
 
   clickMarker(marker: any) {
-    // console.log(marker);
-    if (this.sfc_request_service.source_node == -1){ // if the source is not defined
-      this.sfc_request_service.source_node = marker.id;
+    
+    if (this.sfc_request.source == "-1"){ // if the source is not defined
+      this.sfc_request.source = ""+marker.id;
       this.source_button_text = "source node: "+marker.name;
       this.show_source_button = true;
     }
 
-    else if (this.sfc_request_service.destination_node == -1){ // if destination is not defined
-      this.sfc_request_service.destination_node = marker.id;
+    else if (this.sfc_request.destination == "-1"){ // if destination is not defined
+      this.sfc_request.destination = ""+marker.id;
       this.destination_button_text = "destination node: "+marker.name;
       this.show_destination_button = true;
     }
 
     else{ // if source and destination are defined
-      // console.log(this.source_node, this.destination_node);
-      this.sfc_request_service.temp_node = marker.id;
-      this.dialog.open(ReplaceNodeDialogComponent); // the code is not wating the selection of the new node
+      
+      const dialogRef = this.dialog.open(ReplaceNodeDialogComponent, {
+        disableClose: false,
+        width: "350px",
+        data: marker,
+      });
 
-      console.log(this.markers[this.sfc_request_service.destination_node].name);
-      
-      this.source_button_text = "source node:" + this.markers[this.sfc_request_service.source_node].name;
-      this.destination_button_text = "destination node:" + this.markers[this.sfc_request_service.destination_node].name;      
-      
-      console.log('se liga',this.sfc_request_service.destination_node);
-      console.log(this.markers[this.sfc_request_service.destination_node].name);      
+      dialogRef.afterClosed().subscribe((result) => {
+
+        if (result == "source"){
+          this.sfc_request.source = ""+marker.id;
+          this.source_button_text = "source node: "+marker.name;
+        }
+        else{
+          this.sfc_request.destination = marker.id;
+          this.destination_button_text = "destination node: "+marker.name;
+        }        
+      });
+
     }
   }
 
   remove_source_node(){
-    this.sfc_request_service.source_node = -1;
+    this.sfc_request.destination = "-1";
     this.show_source_button = false;
   }
 
   remove_destination_node(){
-    this.sfc_request_service.destination_node = -1;
+    this.sfc_request.destination = "-1";
     this.show_destination_button = false;
   }
 
+}
 
+class Step{
+  name: string;
+  bandwidth: number;
+  cost: number;
+}
 
+export class Mark{
+  position: { lat: number, lng: number} ;
+  name: string;
+  id: number;
+  label: {color: string}
 }

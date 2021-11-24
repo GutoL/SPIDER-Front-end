@@ -66,5 +66,7 @@
       "availability": 0.99,
       "path_to_files": "/home/guto"
     }
-  ]
+  ],
+
+  "sfc_requests":[]
 }

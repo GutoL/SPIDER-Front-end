@@ -1,11 +1,21 @@
 <div>
+    <mat-form-field class="example-full-width" appearance="fill">
+        <mat-label>SFC name</mat-label>
+        <input matInput placeholder="My request" [(ngModel)]="sfc_request.name">
+    </mat-form-field>
 
-<button color="#381846" mat-icon-button class="spider-button" matTooltip="Clear all steps"(click)="onRemoveAll()">
-    <mat-icon>delete</mat-icon>
-</button>
+    <br>
+    <mat-form-field class="example-full-width" appearance="fill">
+        <mat-label>Availability requirement</mat-label>
+        <input style="color:black;" matInput type="number" min="0" max="1" placeholder="0.99" [(ngModel)]="sfc_request.requirements.availability">
+    </mat-form-field>
 
-    <!-- <form (ngSubmit)="onSubmit()" (change)="changeStep($event, i)"> -->
-    <form (ngSubmit)="onSubmit()">
+    <br>
+    <button color="#381846" mat-icon-button class="spider-button" matTooltip="Clear all steps"(click)="onRemoveAll()">
+        <mat-icon>delete</mat-icon>
+    </button>
+
+    <!-- <form (ngSubmit)="onSubmit()"> -->
 
         <mat-vertical-stepper [linear]="true" #stepper>
         <mat-step *ngFor="let step of newSteps; let i = index">
@@ -28,6 +38,11 @@
                 <mat-form-field class="example-full-width" appearance="fill">
                     <mat-label>Bandwidth requirement (in MiB/s)</mat-label>
                     <input matInput type="number" placeholder="Bandwidth requirement" formControlName="bandwidth" value="10">
+                </mat-form-field>
+
+                <mat-form-field class="example-full-width" appearance="fill">
+                    <mat-label>Cost (in $)</mat-label>
+                    <input matInput type="number" placeholder="Bandwidth requirement" formControlName="cost" value="10">
                 </mat-form-field>
 
             </form>   
@@ -66,11 +81,11 @@
             </div>
         </div>        
 
-        <div fxLayout="row" fxLayoutAlign="end center" >
-            <button mat-raised-button color="warn" class="cancel-button" (click)="cancel_update()">cancel</button>
+    <form (ngSubmit)="onSubmit()">
+        <div fxLayout="row" fxLayoutAlign="end center">
+            <button mat-raised-button class="cancel-button" (click)="cancel_update()">cancel</button>
             <button mat-raised-button type="submit" class="spider-button new-button">ok</button>
         </div>
-
     </form>
 
 </div>

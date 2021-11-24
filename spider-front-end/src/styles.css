@@ -13,6 +13,11 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     color: #fff;
 }
 
+.cancel-button{
+    background-color: #ff9933;
+    color: #fff;
+}
+
 .style-succes {
     background-color: #FFF !important;
     color: #3D5AFE !important;

@@ -1,12 +1,13 @@
+
+
+.cancel-button{
+    margin-top:10px;
+    margin-right:10px;
+}
+
 .new-button {
     float: right;
     margin-top: 10px;
-}
-
-.cancel-button{
-    margin-top: 10px;
-    float: right;
-    margin-right: 5px;
 }
 
 .content {
