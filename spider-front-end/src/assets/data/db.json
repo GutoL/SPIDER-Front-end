@@ -43,30 +43,48 @@
       "mttr": 10,
       "availability": 0.99,
       "path_to_files": "/home/guto"
-    },
-    {
-      "name": "Test",
-      "id": "44HFqrM",
-      "cpu": 2,
-      "memory": 2,
-      "storage": 20,
-      "mttf": 100,
-      "mttr": 10,
-      "availability": 0.99,
-      "path_to_files": "/home/guto"
-    },
-    {
-      "name": "test2",
-      "id": "xKJHo_d",
-      "cpu": 1,
-      "memory": 1,
-      "storage": 10,
-      "mttf": 100,
-      "mttr": 10,
-      "availability": 0.99,
-      "path_to_files": "/home/guto"
     }
   ],
-
-  "sfc_requests":[]
+  "sfc_requests": [
+    {
+      "id": 1,
+      "name": "teste",
+      "VNFs": [
+        {
+          "name": "Firewall",
+          "id": "1",
+          "cpu": 1,
+          "memory": 1,
+          "storage": 1,
+          "mttf": 1,
+          "mttr": 1,
+          "availability": 1,
+          "path_to_files": "/home/catalog/firewall"
+        }
+      ],
+      "destination": "2",
+      "source": "0",
+      "flow_entries": [
+        {
+          "source": "Source",
+          "destination": "Firewall",
+          "resources": {
+            "bandwidth": 10,
+            "cost": 1
+          }
+        }
+      ],
+      "requirements": {
+        "availability": 0.99
+      }
+    }
+  ],
+  "infrastructure":{
+    "nodes":[
+      { "_id" : "2", "availability" : 0.9994794377928162, "available_resources" : { "cpu" : 1.908, "memory" : 1.1545867919921875, "storage" : 11.879753112792969 }, "capabilities" : { "supported_VNFs" : [ { "id" : 0, "type" : "load balance" }, { "id" : 3, "type" : "data compression" }, { "id" : 2, "type" : "DPI" } ] }, "energy" : 20, "latitude" : 19.994326843893894, "longitude" : 73.78965468852559, "metadata" : [ ], "mttf" : 2880, "mttr" : 1.5, "name" : "minion-1", "node_cost" : 500, "original_id" : "2", "peers" : 4, "placed" : {  }, "ports" : [ "enp0s3" ], "resources" : { "cpu" : 2, "memory" : 1.9409446716308594, "storage" : 23.990482330322266 }, "status" : "operational", "type" : "M" },
+      { "_id" : "1", "availability" : 0.9994794377928162, "available_resources" : { "cpu" : 1.836, "memory" : 1.0709114074707031, "storage" : 11.662666320800781 }, "capabilities" : { "supported_VNFs" : [ { "id" : 0, "type" : "load balance" }, { "id" : 3, "type" : "data compression" }, { "id" : 2, "type" : "DPI" } ] }, "energy" : 20, "latitude" : 19.994326843893894, "longitude" : 73.78965468852559, "metadata" : [ ], "mttf" : 2880, "mttr" : 1.5, "name" : "master-node", "node_cost" : 500, "original_id" : "1", "peers" : 4, "placed" : {  }, "ports" : [ "enp0s3" ], "resources" : { "cpu" : 2, "memory" : 1.9409446716308594, "storage" : 23.990482330322266 }, "status" : "operational", "type" : "M" },
+      { "_id" : "router-1" }        
+    ],
+    "links":[]
+  }
 }

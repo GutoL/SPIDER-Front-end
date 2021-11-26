@@ -9,7 +9,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {ReplaceNodeDialogComponent} from 'src/app/components/sfc-screen/replace-node-dialog/replace-node-dialog.component';
 import { InfrastructureService} from "src/app/services/infrastructure.service";
 import { SfcRequest } from 'src/app/models/sfc-request';
-
+import {SfcRequestService} from 'src/app/services/sfc-request.service';
 
 @Component({
   selector: 'app-sfc-screen',
@@ -60,9 +60,8 @@ export class SfcScreenComponent implements OnInit {
   markers: Mark[] = [];
 
   constructor(private vnf_service: VnfService, private router: Router, public dialog: MatDialog,
-              private infrastructure_service: InfrastructureService) {
-                                
-              }
+              private infrastructure_service: InfrastructureService,
+              private sfc_request_service: SfcRequestService) {}
 
   
   ngOnInit() {
@@ -172,8 +171,10 @@ export class SfcScreenComponent implements OnInit {
       }
     }
 
-    console.log(this.sfc_request);
+    this.sfc_request_service.create_sfc_resquest(this.sfc_request).subscribe((sfc_request: SfcRequest) => {
+    this.router.navigate(['/home']);
 
+    });  
   }
 
   getBounds(markers: any){
@@ -224,7 +225,7 @@ export class SfcScreenComponent implements OnInit {
           this.sfc_request.source = ""+marker.id;
           this.source_button_text = "source node: "+marker.name;
         }
-        else{
+        else if (result == "destination"){
           this.sfc_request.destination = marker.id;
           this.destination_button_text = "destination node: "+marker.name;
         }        
