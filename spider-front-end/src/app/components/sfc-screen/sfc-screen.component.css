@@ -8,6 +8,11 @@
     margin-right:10px;
 }
 
+.mat-raised-button{
+    margin-right: 5px;
+    margin-top: 5px;
+}
+
 .new-button {
     float: right;
     margin-top: 10px;

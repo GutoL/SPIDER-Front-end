@@ -1,0 +1,38 @@
+<button color="#381846" mat-icon-button class="spider-button" matTooltip="Clear all steps"(click)="onRemoveAll()">
+    <mat-icon>delete</mat-icon>
+</button>
+
+<mat-stepper orientation="vertical" [linear]="true" #stepper_add_vnfs>
+    <mat-step *ngFor="let step of newSteps; let i = index">
+        <ng-template matStepLabel>{{step.name || 'Configure the VNF'}} 
+            <mat-icon style="vertical-align:middle" (click)="removeStep(i)" 
+            *ngIf="step.name != 'Source'"> highlight_off </mat-icon>
+        </ng-template>
+        
+        <form fxLayout="column" [formGroup]="form_group_list[i]" (change)="changeStep(i)">
+
+            <mat-form-field appearance="fill" *ngIf="step.name != 'Source'">
+                <mat-label>VNF Type</mat-label>
+                <mat-select name="vnf" formControlName="name" (selectionChange)="changeStep(i)">
+                    <mat-option *ngFor="let element of vnf_list" [value]="element.name">
+                    {{element.name}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label>Bandwidth requirement (in MiB/s)</mat-label>
+                <input matInput type="number" placeholder="Bandwidth requirement" formControlName="bandwidth" value="10">
+            </mat-form-field>
+
+            <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label>Cost (in $)</mat-label>
+                <input matInput type="number" placeholder="Bandwidth requirement" formControlName="cost" value="10">
+            </mat-form-field>
+        </form>
+        
+    </mat-step>
+</mat-stepper>
+<button mat-button class="spider-button" (click)="addItem()">       
+    <mat-icon>add</mat-icon>VNF
+</button>

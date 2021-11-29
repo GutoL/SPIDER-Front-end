@@ -1,4 +1,10 @@
-import { Injectable } from '@angular/core';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { ComponentFactoryResolver, Injectable } from '@angular/core';
+import { Config } from '../models/config';
+import { retry, catchError } from 'rxjs/operators';
+import { Observable, throwError} from 'rxjs';
+import { Infrastructure } from '../models/infrastructure';
+import { Mark } from '../components/sfc-screen/sfc-screen.component';
 
 @Injectable({
   providedIn: 'root'
@@ -22,18 +28,49 @@ export class InfrastructureService {
                   label: {color: 'red'} 
                 };
 
-  constructor() { }
-
-  get_nodes_makers(){
-    return [this.marker_london, this.marker_LA, this.marker_recife];
+  // Headers
+  httpOptions = {
+    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+  }
+  
+  infrastructure: Infrastructure;
+  server_url : string;
+  
+  load_infrastructure(id: number){
+    this.get_infrastructure_by_id(id).subscribe((infrastructure: Infrastructure) => {
+      this.infrastructure = infrastructure;
+    });
   }
 
-  get_links_markers(){
-    return [
-            this.marker_london.position,
-            this.marker_LA.position,
-            this.marker_recife.position,
-            this.marker_london.position
-          ]
+  constructor(private httpClient: HttpClient) {
+    this.server_url = Config.server_ip+":"+Config.server_port+"/infrastructure";
   }
+
+  get_all_infrastructures(): Observable<Infrastructure[]>{
+    return this.httpClient.get<Infrastructure[]>(this.server_url)
+      .pipe(
+        retry(2),
+        catchError(this.handleError))
+  }
+
+  get_infrastructure_by_id(id: number): Observable<Infrastructure>{
+    return this.httpClient.get<Infrastructure>(this.server_url + '/' + id)
+      .pipe(
+        retry(2),
+        catchError(this.handleError)
+      )
+  }
+
+  handleError(error: HttpErrorResponse) {
+    let errorMessage = '';
+    if (error.error instanceof ErrorEvent) {
+      // An error occured at the client side
+      errorMessage = error.error.message;
+    } else {
+      // An error occured at the server side
+      errorMessage = `Error code: ${error.status}, ` + `message: ${error.message}`;
+    }
+    console.log('ERROR:',errorMessage);
+    return throwError(errorMessage);
+  }  
 }

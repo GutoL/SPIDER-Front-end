@@ -30,6 +30,9 @@ import { MatRadioModule } from '@angular/material/radio';
 import { GoogleMapsModule } from '@angular/google-maps';
 import { ReplaceNodeDialogComponent } from './components/sfc-screen/replace-node-dialog/replace-node-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
+import {MatGridListModule} from '@angular/material/grid-list';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
+import { AddVnfsStepperComponent } from './components/sfc-screen/add-vnfs-stepper/add-vnfs-stepper.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +44,8 @@ import { MatDialogModule } from '@angular/material/dialog';
     SettingsScreenComponent,
     CreateVnfComponent,
     FooterComponent,
-    ReplaceNodeDialogComponent
+    ReplaceNodeDialogComponent,
+    AddVnfsStepperComponent
   ],
   imports: [
     BrowserModule,
@@ -66,7 +70,9 @@ import { MatDialogModule } from '@angular/material/dialog';
     MatStepperModule,
     MatRadioModule,
     GoogleMapsModule,
-    MatDialogModule
+    MatDialogModule,
+    MatGridListModule,
+    MatProgressSpinnerModule
   ],
   providers: [],
   bootstrap: [AppComponent]

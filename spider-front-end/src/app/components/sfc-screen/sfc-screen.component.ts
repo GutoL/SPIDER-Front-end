@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormControl, FormGroup, FormArray } from '@angular/forms';
+import { FormControl, FormGroup, FormArray, FormBuilder, Validators } from '@angular/forms';
 import { Vnf } from 'src/app/models/vnf';
 import { VnfService } from 'src/app/services/vnf.service';
 import { Router } from '@angular/router';
@@ -10,6 +10,8 @@ import {ReplaceNodeDialogComponent} from 'src/app/components/sfc-screen/replace-
 import { InfrastructureService} from "src/app/services/infrastructure.service";
 import { SfcRequest } from 'src/app/models/sfc-request';
 import {SfcRequestService} from 'src/app/services/sfc-request.service';
+import { Infrastructure } from 'src/app/models/infrastructure';
+import { Step } from './add-vnfs-stepper/add-vnfs-stepper.component';
 
 @Component({
   selector: 'app-sfc-screen',
@@ -22,22 +24,26 @@ export class SfcScreenComponent implements OnInit {
   // https://timdeschryver.dev/blog/google-maps-as-an-angular-component#googlemap
     
   @ViewChild(GoogleMap, { static: false }) map: GoogleMap;
-  @ViewChild(MapInfoWindow, { static: false }) infoWindow: MapInfoWindow
+  // @ViewChild(MapInfoWindow, { static: false }) infoWindow: MapInfoWindow;
 
-  form_group_list: FormGroup[] = [];
+  isEditable: boolean = true;
+
+  firstFormGroup: FormGroup;
+  secondFormGroup: FormGroup;
+  thirdFormGroup: FormGroup;
 
   isLinear = false;
   formGroup: FormGroup;
   form: FormArray;
-  @ViewChild('stepper') stepper: any;
 
   sfc_request: SfcRequest = {id: 0, name: "", VNFs: [], destination: "-1",
                              source: "-1",flow_entries:[], 
                              requirements:{availability:0.99}};
 
-  vnf_list: Vnf[];
-  
+  vnf_list: Vnf[] = [];
   newSteps: Step[] = [];
+
+  show_map: boolean = false;
 
   show_source_button = false;
   source_button_text: string;
@@ -45,8 +51,10 @@ export class SfcScreenComponent implements OnInit {
   show_destination_button = false;
   destination_button_text: string;
 
+  infrastructure: Infrastructure;
+
   mapOptions: google.maps.MapOptions = {
-      zoom : 14,
+      zoom : 10,
       disableDefaultUI: true,
   }
   
@@ -61,80 +69,81 @@ export class SfcScreenComponent implements OnInit {
 
   constructor(private vnf_service: VnfService, private router: Router, public dialog: MatDialog,
               private infrastructure_service: InfrastructureService,
-              private sfc_request_service: SfcRequestService) {}
+              private sfc_request_service: SfcRequestService,
+              private _formBuilder: FormBuilder) {}
 
-  
-  ngOnInit() {
+  ngOnInit(): void {
+    this.firstFormGroup = this._formBuilder.group({
+      sfc_name_ctrl: ['', Validators.required],
+      sfc_av_ctrl: ['', Validators.required]
+    });
+    this.secondFormGroup = this._formBuilder.group({});
+    this.thirdFormGroup = this._formBuilder.group({});
 
     this.sfc_request.source = "-1";
     this.sfc_request.destination = "-1";
 
-    this.markers = this.infrastructure_service.get_nodes_makers();
-
     this.get_vnfs();
 
-    let source = {name: "Source", bandwidth:10, cost: 1}
-    
-    this.newSteps.push(source);
-    this.form_group_list.push(this.create_form(source));
-
-    let links = this.infrastructure_service.get_links_markers();
-    for(let i in links){
-      this.polylineOptions.path.push(links[i]);
-    }
+    this.infrastructure_service.get_infrastructure_by_id(0).subscribe((infrastructure: Infrastructure) => {
+      this.infrastructure = infrastructure;
+      // this.define_lines_map();
+    });    
   }
 
-  ngAfterViewInit(){
+  define_points_on_map(){
+    for(let i=0; i < this.infrastructure.nodes.length; i++){
+
+      this.markers.push(
+        {
+          "position": { lat: +this.infrastructure.nodes[i].latitude, lng: +this.infrastructure.nodes[i].longitude}, 
+          "name":this.infrastructure.nodes[i].name, 
+          "id": +this.infrastructure.nodes[i]._id, // cast to number
+          "label": {color: 'blue'}
+        }
+      )
+    }
+
     const bounds = this.getBounds(this.markers);
     this.map.fitBounds(bounds);
   }
-  
-  create_form(step: Step){
-    let formGroup = new FormGroup({
-      name: new FormControl(step.name),
-      bandwidth: new FormControl(step.bandwidth),
-      cost: new FormControl(step.cost)
-    });
-    return formGroup;
-  }
 
-  get_vnfs(){
-    this.vnf_service.get_vnfs().subscribe((vnfs: Vnf[]) => {
-      this.vnf_list = vnfs;  
-    });
-  }
+  define_lines_map(){
+    let links:{lat: number, lng:number}[] = [];
 
-  isSet = (value: any) => {
-    return value !== undefined && value !== null;
-  }
+    for(let i=0; i < this.infrastructure.links.length; i++){
+      for(let j=0; j < this.infrastructure.nodes.length; j++){
+        
+        if (this.infrastructure.links[i].src_node == this.infrastructure.nodes[j]._id){
 
-  addItem() {
+          links.push({
+                      lat: +this.infrastructure.nodes[j].latitude,
+                      lng: +this.infrastructure.nodes[j].longitude
+                    })
+          break;
+        }
 
-    this.form_group_list.push(this.create_form({name:"",bandwidth:10, cost: 1}));
+      }
 
-    this.newSteps.push({ name: "", bandwidth: 10, cost: 1});
+      for(let j=0; j < this.infrastructure.nodes.length; j++){
+        
+        if (this.infrastructure.links[i].dst_node == this.infrastructure.nodes[j]._id){
 
-    this.stepper.selectedIndex = this.newSteps.length - 1;    
-  }
+          links.push({
+                      lat: +this.infrastructure.nodes[j].latitude,
+                      lng: +this.infrastructure.nodes[j].longitude
+                    })
+          break;
+        }
 
-  changeStep(i: number){
+      }  
+    }
 
-    this.newSteps[i].name = this.form_group_list[i].value.name;
-    this.newSteps[i].bandwidth = this.form_group_list[i].value.bandwidth;
-    
-  }
+    console.log(links);
+    for(let i in links){
+      this.polylineOptions.path.push(links[i]);
+    }
 
-  onRemoveAll() {
-    this.newSteps = [];
-    this.newSteps.push({ name: "Source", bandwidth:10, cost: 1 });
-
-    this.form_group_list = [];
-    this.form_group_list.push(this.create_form({name: "Source", bandwidth:10, cost: 1 }));
-  }
-
-  removeStep(i: number){
-    this.newSteps.splice(i,1);
-    this.form_group_list.splice(i, 1);
   }
 
   cancel_update(){
@@ -152,6 +161,7 @@ export class SfcScreenComponent implements OnInit {
       alert("Please, select a destination node in the map!");
     }
     else{
+
       for(let i=0; i < this.newSteps.length; i++){
         
         if (i < this.newSteps.length-1){
@@ -169,12 +179,24 @@ export class SfcScreenComponent implements OnInit {
           }
         }        
       }
-    }
 
-    this.sfc_request_service.create_sfc_resquest(this.sfc_request).subscribe((sfc_request: SfcRequest) => {
-    this.router.navigate(['/home']);
+      this.sfc_request.flow_entries.push({
+        source: this.newSteps[this.newSteps.length-1].name,
+        destination: "destination",
+        resources: {bandwidth: this.newSteps[this.newSteps.length-1].bandwidth, cost: 1}
+      })
 
-    });  
+      console.log(this.sfc_request);
+      // this.sfc_request_service.create_sfc_resquest(this.sfc_request).subscribe((sfc_request: SfcRequest) => {
+      //   this.router.navigate(['/home']);
+      // });  
+      }    
+  }
+
+  get_vnfs(){
+    this.vnf_service.get_vnfs().subscribe((vnfs: Vnf[]) => {
+      this.vnf_list = vnfs;
+    });
   }
 
   getBounds(markers: any){
@@ -198,7 +220,7 @@ export class SfcScreenComponent implements OnInit {
   }
 
   clickMarker(marker: any) {
-    
+
     if (this.sfc_request.source == "-1"){ // if the source is not defined
       this.sfc_request.source = ""+marker.id;
       this.source_button_text = "source node: "+marker.name;
@@ -235,7 +257,7 @@ export class SfcScreenComponent implements OnInit {
   }
 
   remove_source_node(){
-    this.sfc_request.destination = "-1";
+    this.sfc_request.source = "-1";
     this.show_source_button = false;
   }
 
@@ -244,12 +266,11 @@ export class SfcScreenComponent implements OnInit {
     this.show_destination_button = false;
   }
 
-}
+  show_map_interface(){
+    this.show_map = true;
+    this.define_points_on_map();    
+  }
 
-class Step{
-  name: string;
-  bandwidth: number;
-  cost: number;
 }
 
 export class Mark{

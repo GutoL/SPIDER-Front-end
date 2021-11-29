@@ -1,92 +1,97 @@
 <div>
-    <mat-form-field class="example-full-width" appearance="fill">
-        <mat-label>SFC name</mat-label>
-        <input matInput style="color:black;" placeholder="My request" [(ngModel)]="sfc_request.name">
-    </mat-form-field>
 
-    <br>
-    <mat-form-field class="example-full-width" appearance="fill">
-        <mat-label>Availability requirement</mat-label>
-        <input style="color:black;" matInput type="number" min="0" max="1" placeholder="0.99" [(ngModel)]="sfc_request.requirements.availability">
-    </mat-form-field>
-
-    <br>
-    <button color="#381846" mat-icon-button class="spider-button" matTooltip="Clear all steps"(click)="onRemoveAll()">
-        <mat-icon>delete</mat-icon>
-    </button>
-
-    <!-- <form (ngSubmit)="onSubmit()"> -->
-
-        <mat-vertical-stepper [linear]="true" #stepper>
-        <mat-step *ngFor="let step of newSteps; let i = index">
-            <ng-template matStepLabel>{{step.name || 'Configure the VNF'}} 
-                <mat-icon style="vertical-align:middle" (click)="removeStep(i)" 
-                *ngIf="step.name != 'Source'"> highlight_off </mat-icon>
-            </ng-template>
+    <mat-stepper orientation="vertical" linear #stepper_scf_creation>
+        <mat-step [stepControl]="firstFormGroup" [editable]="isEditable">
+          <form [formGroup]="firstFormGroup">
+            <ng-template matStepLabel>Define the SFC features</ng-template>
             
-            <form fxLayout="column" [formGroup]="form_group_list[i]" (change)="changeStep(i)">
-
-                <mat-form-field appearance="fill" *ngIf="step.name != 'Source'">
-                    <mat-label>VNF Type</mat-label>
-                    <mat-select name="vnf" formControlName="name" (selectionChange)="changeStep(i)">
-                        <mat-option *ngFor="let element of vnf_list" [value]="element.name">
-                        {{element.name}}
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>
-
-                <mat-form-field class="example-full-width" appearance="fill">
-                    <mat-label>Bandwidth requirement (in MiB/s)</mat-label>
-                    <input matInput type="number" placeholder="Bandwidth requirement" formControlName="bandwidth" value="10">
-                </mat-form-field>
-
-                <mat-form-field class="example-full-width" appearance="fill">
-                    <mat-label>Cost (in $)</mat-label>
-                    <input matInput type="number" placeholder="Bandwidth requirement" formControlName="cost" value="10">
-                </mat-form-field>
-
-            </form>   
-
+            <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label>SFC name</mat-label>
+                <input matInput style="color:black;"
+                    placeholder="My request"
+                    formControlName="sfc_name_ctrl"                     
+                    [(ngModel)]="sfc_request.name">
+            </mat-form-field>
+            <br>
+            <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label>Availability requirement</mat-label>
+                <input style="color:black;" matInput type="number"
+                    min="0" max="1" placeholder="0.99" 
+                    formControlName="sfc_av_ctrl"
+                    [(ngModel)]="sfc_request.requirements.availability">
+            </mat-form-field>
+            
+            <div>
+            <button mat-button class="spider-button" matStepperNext>next</button>
+            </div>
+          </form>
         </mat-step>
+
+        <mat-step [stepControl]="secondFormGroup" [editable]="isEditable">
+          <form [formGroup]="secondFormGroup">
+            <ng-template matStepLabel>Select the VNFs</ng-template>
+            
+            <app-add-vnfs-stepper [vnf_list]="vnf_list" [newSteps]="newSteps"></app-add-vnfs-stepper>
+            
+            <div>
+              <button mat-raised-button matStepperPrevious color="warn">back</button>
+              <button mat-button matStepperNext class="spider-button" (click)="show_map_interface()">next</button>
+            </div>
+          </form>
+        </mat-step>
+
+        <mat-step [stepControl]="thirdFormGroup" [editable]="isEditable">
+            <form [formGroup]="thirdFormGroup">
+                <ng-template matStepLabel>Source and destination nodes</ng-template>
+              
+                <h3 style="color:black;"> 
+                    Please, select the source and destinaton of SFC request in the map:
+                </h3>
+                
+                <mat-grid-list cols="2">
+                    <mat-grid-tile>
+                        <div class="my-google-map">
+                            <google-map [options]="mapOptions">
+                                <map-marker #markerElem *ngFor="let marker of markers" [position]="marker.position"
+                                (mapClick)="clickMarker(marker)"></map-marker>
+                                <map-polyline [options]="polylineOptions" *ngIf="show_map == true"></map-polyline>
+                            </google-map>            
+                        </div>
+                    </mat-grid-tile>
+        
+                    <mat-grid-tile>
+                        <div fxLayout="column">
+                            <button *ngIf="show_source_button" color="#381846" mat-raised-button 
+                            class="spider-button node_button" (click)="remove_source_node()">
+                                {{source_button_text}} <mat-icon>highlight_off</mat-icon>
+                            </button>
+                            <button *ngIf="show_destination_button" color="#381846" mat-raised-button 
+                                class="spider-button node_button" (click)="remove_destination_node()">
+                                {{destination_button_text}}<mat-icon>highlight_off</mat-icon>
+                            </button>
+                        </div>
+                    </mat-grid-tile>
+                </mat-grid-list>     
+        
+                <div>
+                    <button mat-raised-button matStepperPrevious color="warn">back</button>
+                    <button mat-button matStepperNext class="spider-button">next</button>
+                </div>
+            </form>
+          </mat-step>
         
         <mat-step>
-            <ng-template matStepLabel>
-            <button mat-button class="spider-button" (click)="addItem()">       
-            Add a VNF <mat-icon>add</mat-icon>
-            </button>
-            </ng-template>
+          <ng-template matStepLabel>Done</ng-template>
+          <p>You are now done.</p>
+          <div>
+            <form (ngSubmit)="onSubmit()">
+                <button mat-raised-button class="cancel-button" (click)="cancel_update()">cancel</button>
+                <button mat-raised-button matStepperPrevious color="warn">back</button>
+                <button mat-raised-button type="submit" class="spider-button">ok</button>
+            </form>
+          </div>
         </mat-step>
-
-        </mat-vertical-stepper>
-
-        <h3 style="color:black;">Please, select the source and destinaton of SFC request in the map:</h3>
-        <div fxLayout="row">
-            <div class="my-google-map">
-                <google-map [options]="mapOptions">
-                    <map-marker #markerElem *ngFor="let marker of markers" [position]="marker.position"
-                    (mapClick)="clickMarker(marker)"></map-marker>
-                    <map-polyline [options]="polylineOptions"></map-polyline>
-                </google-map>            
-            </div>
-            
-            <div fxLayout="column">
-                <button *ngIf="show_source_button" color="#381846" mat-raised-button 
-                class="spider-button node_button" (click)="remove_source_node()">
-                    {{source_button_text}} <mat-icon>highlight_off</mat-icon>
-                </button>
-                <button *ngIf="show_destination_button" color="#381846" mat-raised-button 
-                    class="spider-button node_button" (click)="remove_destination_node()">
-                    {{destination_button_text}}<mat-icon>highlight_off</mat-icon>
-                </button>
-            </div>
-        </div>        
-
-    <form (ngSubmit)="onSubmit()">
-        <div fxLayout="row" fxLayoutAlign="end center">
-            <button mat-raised-button class="cancel-button" (click)="cancel_update()">cancel</button>
-            <button mat-raised-button type="submit" class="spider-button new-button">ok</button>
-        </div>
-    </form>
+    </mat-stepper>
 
 </div>
 
