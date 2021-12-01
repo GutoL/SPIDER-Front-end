@@ -1,0 +1,21 @@
+<mat-grid-list cols="2">
+    <mat-grid-tile>
+        <div id="map"></div>
+    </mat-grid-tile>
+
+    <mat-grid-tile>
+        <div fxLayout="column">
+            <button mat-raised-button class="spider-button">
+                Source: <span id="badgeSource" class="badge">{{source_name}}</span>
+            </button>
+            <button mat-raised-button class="spider-button">
+                Target: <span id="badgeTarget" class="badge">{{destination_name}}</span>
+            </button>
+        </div>
+    </mat-grid-tile>
+</mat-grid-list>
+
+<div>
+    <button mat-raised-button matStepperPrevious color="warn">back</button>
+    <button mat-button matStepperNext (click)="change_nodes_name()" class="spider-button">next</button>
+</div>

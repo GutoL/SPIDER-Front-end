@@ -27,12 +27,12 @@ import { MatSelectModule } from '@angular/material/select';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import {MatStepperModule} from '@angular/material/stepper';
 import { MatRadioModule } from '@angular/material/radio';
-import { GoogleMapsModule } from '@angular/google-maps';
 import { ReplaceNodeDialogComponent } from './components/sfc-screen/replace-node-dialog/replace-node-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import {MatGridListModule} from '@angular/material/grid-list';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { AddVnfsStepperComponent } from './components/sfc-screen/add-vnfs-stepper/add-vnfs-stepper.component';
+import { InfraMapComponent } from './components/sfc-screen/infra-map/infra-map.component';
 
 @NgModule({
   declarations: [
@@ -45,7 +45,8 @@ import { AddVnfsStepperComponent } from './components/sfc-screen/add-vnfs-steppe
     CreateVnfComponent,
     FooterComponent,
     ReplaceNodeDialogComponent,
-    AddVnfsStepperComponent
+    AddVnfsStepperComponent,
+    InfraMapComponent
   ],
   imports: [
     BrowserModule,
@@ -69,7 +70,6 @@ import { AddVnfsStepperComponent } from './components/sfc-screen/add-vnfs-steppe
     MatSelectModule,
     MatStepperModule,
     MatRadioModule,
-    GoogleMapsModule,
     MatDialogModule,
     MatGridListModule,
     MatProgressSpinnerModule

@@ -35,7 +35,7 @@
             
             <div>
               <button mat-raised-button matStepperPrevious color="warn">back</button>
-              <button mat-button matStepperNext class="spider-button" (click)="show_map_interface()">next</button>
+              <button mat-button matStepperNext class="spider-button">next</button>
             </div>
           </form>
         </mat-step>
@@ -48,41 +48,18 @@
                     Please, select the source and destinaton of SFC request in the map:
                 </h3>
                 
-                <mat-grid-list cols="2">
-                    <mat-grid-tile>
-                        <div class="my-google-map">
-                            <google-map [options]="mapOptions">
-                                <map-marker #markerElem *ngFor="let marker of markers" [position]="marker.position"
-                                (mapClick)="clickMarker(marker)"></map-marker>
-                                <map-polyline [options]="polylineOptions" *ngIf="show_map == true"></map-polyline>
-                            </google-map>            
-                        </div>
-                    </mat-grid-tile>
+                <app-infra-map (change_nodes_name_event)="update_nodes_names($event)"></app-infra-map>
         
-                    <mat-grid-tile>
-                        <div fxLayout="column">
-                            <button *ngIf="show_source_button" color="#381846" mat-raised-button 
-                            class="spider-button node_button" (click)="remove_source_node()">
-                                {{source_button_text}} <mat-icon>highlight_off</mat-icon>
-                            </button>
-                            <button *ngIf="show_destination_button" color="#381846" mat-raised-button 
-                                class="spider-button node_button" (click)="remove_destination_node()">
-                                {{destination_button_text}}<mat-icon>highlight_off</mat-icon>
-                            </button>
-                        </div>
-                    </mat-grid-tile>
-                </mat-grid-list>     
-        
-                <div>
+                <!-- <div>
                     <button mat-raised-button matStepperPrevious color="warn">back</button>
                     <button mat-button matStepperNext class="spider-button">next</button>
-                </div>
+                </div> -->
             </form>
           </mat-step>
         
         <mat-step>
           <ng-template matStepLabel>Done</ng-template>
-          <p>You are now done.</p>
+          <p style="color:black;">You are now done.</p>
           <div>
             <form (ngSubmit)="onSubmit()">
                 <button mat-raised-button class="cancel-button" (click)="cancel_update()">cancel</button>
