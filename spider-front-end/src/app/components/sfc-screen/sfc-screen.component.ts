@@ -50,8 +50,8 @@ export class SfcScreenComponent implements OnInit {
   ngOnInit(): void {
 
     this.firstFormGroup = this._formBuilder.group({
-      sfc_name_ctrl: ['', Validators.required],
-      sfc_av_ctrl: ['', Validators.required]
+      sfc_name_ctrl: ['My SFC', Validators.required],
+      sfc_av_ctrl: [0.99, Validators.required]
     });
     this.secondFormGroup = this._formBuilder.group({});
     this.thirdFormGroup = this._formBuilder.group({});
@@ -79,7 +79,8 @@ export class SfcScreenComponent implements OnInit {
 
   onSubmit(){
 
-    console.log(this.sfc_request.destination);
+    this.sfc_request.name = this.firstFormGroup.value.sfc_name_ctrl;
+    this.sfc_request.requirements.availability = this.firstFormGroup.value.sfc_av_ctrl;
 
     if(this.newSteps.length == 1){
       alert("Please, select at least one VNF!");

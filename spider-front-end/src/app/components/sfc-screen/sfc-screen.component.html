@@ -8,17 +8,15 @@
             <mat-form-field class="example-full-width" appearance="fill">
                 <mat-label>SFC name</mat-label>
                 <input matInput style="color:black;"
-                    placeholder="My request"
-                    formControlName="sfc_name_ctrl"                     
-                    [(ngModel)]="sfc_request.name">
+                    placeholder=""
+                    formControlName="sfc_name_ctrl">
             </mat-form-field>
             <br>
             <mat-form-field class="example-full-width" appearance="fill">
                 <mat-label>Availability requirement</mat-label>
                 <input style="color:black;" matInput type="number"
                     min="0" max="1" placeholder="0.99" 
-                    formControlName="sfc_av_ctrl"
-                    [(ngModel)]="sfc_request.requirements.availability">
+                    formControlName="sfc_av_ctrl">
             </mat-form-field>
             
             <div>
@@ -59,7 +57,7 @@
         
         <mat-step>
           <ng-template matStepLabel>Done</ng-template>
-          <p style="color:black;">You are now done.</p>
+          <p style="color:black;">You have completed setting up the SFC order. If you want to change any settings, press the back button, otherwise press ok button.</p>
           <div>
             <form (ngSubmit)="onSubmit()">
                 <button mat-raised-button class="cancel-button" (click)="cancel_update()">cancel</button>
