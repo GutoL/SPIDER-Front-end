@@ -20,7 +20,7 @@ export class VnfService {
   
   constructor(private httpClient: HttpClient) { 
 
-    this.server_url = Config.server_ip+":"+Config.server_port+"/vnfs";
+    this.server_url = Config.server_ip+":"+Config.server_port+"/vnf";
     this.reset_vnf();
 
   }

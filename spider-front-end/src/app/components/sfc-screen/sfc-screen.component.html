@@ -25,6 +25,19 @@
           </form>
         </mat-step>
 
+        <mat-step [stepControl]="thirdFormGroup" [editable]="isEditable">
+          <form [formGroup]="thirdFormGroup">
+              <ng-template matStepLabel>Source and destination nodes</ng-template>
+            
+              <h3 style="color:black;"> 
+                  Please, select the source and destinaton of SFC request in the map:
+              </h3>
+              
+              <app-infra-map (change_nodes_name_event)="update_nodes_names($event)"></app-infra-map>      
+              
+          </form>
+        </mat-step>
+
         <mat-step [stepControl]="secondFormGroup" [editable]="isEditable">
           <form [formGroup]="secondFormGroup">
             <ng-template matStepLabel>Select the VNFs</ng-template>
@@ -38,26 +51,9 @@
           </form>
         </mat-step>
 
-        <mat-step [stepControl]="thirdFormGroup" [editable]="isEditable">
-            <form [formGroup]="thirdFormGroup">
-                <ng-template matStepLabel>Source and destination nodes</ng-template>
-              
-                <h3 style="color:black;"> 
-                    Please, select the source and destinaton of SFC request in the map:
-                </h3>
-                
-                <app-infra-map (change_nodes_name_event)="update_nodes_names($event)"></app-infra-map>
-        
-                <!-- <div>
-                    <button mat-raised-button matStepperPrevious color="warn">back</button>
-                    <button mat-button matStepperNext class="spider-button">next</button>
-                </div> -->
-            </form>
-          </mat-step>
-        
         <mat-step>
           <ng-template matStepLabel>Done</ng-template>
-          <p style="color:black;">You have completed setting up the SFC order. If you want to change any settings, press the back button, otherwise press ok button.</p>
+          <p style="color:black;">You have completed setting up the SFC request. If you want to change any settings, press the back button, otherwise press ok button.</p>
           <div>
             <form (ngSubmit)="onSubmit()">
                 <button mat-raised-button class="cancel-button" (click)="cancel_update()">cancel</button>

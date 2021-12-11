@@ -1,7 +1,3 @@
-<button color="#381846" mat-icon-button class="spider-button" matTooltip="Clear all steps"(click)="onRemoveAll()">
-    <mat-icon>delete</mat-icon>
-</button>
-
 <mat-stepper orientation="vertical" [linear]="true" #stepper_add_vnfs>
     <mat-step *ngFor="let step of newSteps; let i = index">
         <ng-template matStepLabel>{{step.name || 'Configure the VNF'}} 
@@ -33,6 +29,10 @@
         
     </mat-step>
 </mat-stepper>
+
 <button mat-button class="spider-button" (click)="addItem()">       
     <mat-icon>add</mat-icon>VNF
+</button>
+<button color="#381846" mat-button class="spider-button" matTooltip="Clear all steps"(click)="onRemoveAll()">
+    delete all
 </button>
