@@ -81,9 +81,7 @@ export class VnfService {
     this.vnf_to_update ={
         "name": "",
         "id": "",
-        "cpu": 0,
-        "memory": 0,
-        "storage": 0,
+        "resources":{"cpu": 0,"memory": 0,"storage": 0},
         "mttf": 0,
         "mttr": 0,
         "availability": 0,

@@ -1,9 +1,7 @@
 export interface Vnf {
     name: string,
     id: string,
-    cpu: number,
-    memory: number,
-    storage: number,
+    resources: {cpu: number, memory: number, storage: number}
     mttf: number,
     mttr: number,
     availability: number,

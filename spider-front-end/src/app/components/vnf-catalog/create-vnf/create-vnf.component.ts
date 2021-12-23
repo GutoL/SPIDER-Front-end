@@ -54,9 +54,9 @@ export class CreateVnfComponent implements OnInit {
   create_form(vnf: Vnf){
     this.formVNF = new FormGroup({
       name: new FormControl(vnf.name),
-      cpu: new FormControl(vnf.cpu),
-      memory: new FormControl(vnf.memory),
-      storage: new FormControl(vnf.storage),
+      cpu: new FormControl(vnf.resources.cpu),
+      memory: new FormControl(vnf.resources.memory),
+      storage: new FormControl(vnf.resources.storage),
       mttf: new FormControl(vnf.mttf),
       mttr: new FormControl(vnf.mttr),
       availability: new FormControl(vnf.availability),
@@ -74,9 +74,11 @@ export class CreateVnfComponent implements OnInit {
         let vnf: Vnf = {
                   "id": "0",
                   "name":this.formVNF.value.name,
-                  "cpu":this.flavours[i].cpu,
-                  "memory":this.flavours[i].memory,
-                  "storage":this.flavours[i].storage,
+                  "resources": {  
+                    "cpu":this.flavours[i].cpu,
+                    "memory":this.flavours[i].memory,
+                    "storage":this.flavours[i].storage
+                  },
                   "mttf":this.flavours[i].mttf,
                   "mttr":this.flavours[i].mttr,
                   "availability":this.flavours[i].availability,
@@ -97,9 +99,9 @@ export class CreateVnfComponent implements OnInit {
   onSubmit(){
     
     this.vnf_to_update.name = this.formVNF.value.name;
-    this.vnf_to_update.cpu = this.formVNF.value.cpu;
-    this.vnf_to_update.memory = this.formVNF.value.memory;
-    this.vnf_to_update.storage = this.formVNF.value.storage;
+    this.vnf_to_update.resources.cpu = this.formVNF.value.cpu;
+    this.vnf_to_update.resources.memory = this.formVNF.value.memory;
+    this.vnf_to_update.resources.storage = this.formVNF.value.storage;
     this.vnf_to_update.mttf = this.formVNF.value.mttf;
     this.vnf_to_update.mttr = this.formVNF.value.mttr;
     this.vnf_to_update.availability = this.formVNF.value.availability;

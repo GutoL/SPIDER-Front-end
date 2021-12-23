@@ -30,7 +30,7 @@ export class VnfCatalogComponent implements OnInit {
 
   expandedElement: Vnf;
   expand: boolean = false;
-  vnf_list: Vnf[];
+  vnf_list: Vnf[] = [];
 
   constructor(private router: Router, private vnf_service: VnfService) {
   }
@@ -60,7 +60,13 @@ export class VnfCatalogComponent implements OnInit {
 
   get_vnfs(){
     this.vnf_service.get_vnfs().subscribe((vnfs: Vnf[]) => {
-      this.vnf_list = vnfs; 
+      
+      vnfs.forEach(vnf => {
+        console.log(vnf);
+        vnf.id = vnf['id'];
+        this.vnf_list.push(vnf);
+      });
+      
       // Assign the data to the data source for the table to render
       this.dataSource = new MatTableDataSource(this.vnf_list);
       

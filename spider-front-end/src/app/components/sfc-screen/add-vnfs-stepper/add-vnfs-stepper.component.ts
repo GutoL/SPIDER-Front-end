@@ -20,7 +20,7 @@ export class AddVnfsStepperComponent implements OnInit {
   constructor(private vnf_service: VnfService) { }
 
   ngOnInit(): void {
-    let source = {name: "Source", bandwidth:10, cost: 1}
+    let source = {name: "Source", bandwidth: 1, cost: 1}
     
     this.newSteps.push(source);
     this.form_group_list.push(this.create_form(source));
@@ -29,7 +29,7 @@ export class AddVnfsStepperComponent implements OnInit {
   
   addItem() {
 
-    let temp_vnf = { name: "", bandwidth: 10, cost: 1};
+    let temp_vnf = { name: "", bandwidth: 1, cost: 1};
 
     this.form_group_list.push(this.create_form(temp_vnf));
     this.newSteps.push(temp_vnf);
@@ -46,10 +46,10 @@ export class AddVnfsStepperComponent implements OnInit {
 
   onRemoveAll() {
     this.newSteps = [];
-    this.newSteps.push({ name: "Source", bandwidth:10, cost: 1 });
+    this.newSteps.push({ name: "Source", bandwidth: 1, cost: 1 });
 
     this.form_group_list = [];
-    this.form_group_list.push(this.create_form({name: "Source", bandwidth:10, cost: 1}));
+    this.form_group_list.push(this.create_form({name: "Source", bandwidth: 1, cost: 1}));
   }
 
   removeStep(i: number){

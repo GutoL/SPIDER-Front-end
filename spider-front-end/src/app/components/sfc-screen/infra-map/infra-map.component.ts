@@ -30,9 +30,11 @@ export class InfraMapComponent implements OnInit {
 
     let src_node: string;
     let dst_node: string;
-
-    this.infrastructure_service.get_infrastructure_by_name(this.infra_name).subscribe((infrastructure: Infrastructure) => {
-      this.infrastructure = infrastructure;      
+    
+    // this.infrastructure_service.get_infrastructure_by_name(this.infra_name).subscribe((infrastructure: Infrastructure) => {
+    this.infrastructure_service.get_infrastructure_from_monitor().subscribe((infrastructure: Infrastructure) => {
+      console.log(infrastructure)
+      this.infrastructure = infrastructure;
 
       for (let i=0; i < this.infrastructure.nodes.length; i++){
         this.nodes.push(

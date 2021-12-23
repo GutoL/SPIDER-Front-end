@@ -18,7 +18,7 @@ export class SfcRequestService {
   server_url = "";
 
   constructor(private httpClient: HttpClient) {
-    this.server_url = Config.server_ip+":"+Config.server_port+"/sfc_requests";
+    this.server_url = Config.server_ip+":"+Config.server_port+"/sfc_request";
   }
 
   get_sfc_resquests(): Observable<SfcRequest[]>{
@@ -37,12 +37,12 @@ export class SfcRequestService {
   }
 
   create_sfc_resquest(sfc_request: SfcRequest): Observable<SfcRequest> {
-    console.log(sfc_request);
-    console.log(this.server_url);
+    console.log('sfc_request',sfc_request);
+    console.log('server url:',this.server_url);
 
     return this.httpClient.post<SfcRequest>(this.server_url, JSON.stringify(sfc_request), this.httpOptions)
       .pipe(
-        retry(2),
+        // retry(2),
         catchError(this.handleError)
       )
   }

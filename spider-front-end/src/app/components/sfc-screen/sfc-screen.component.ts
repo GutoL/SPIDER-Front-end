@@ -117,16 +117,20 @@ export class SfcScreenComponent implements OnInit {
         resources: {bandwidth: this.newSteps[this.newSteps.length-1].bandwidth, cost: 1}
       })
 
-      console.log(this.sfc_request);
-      // this.sfc_request_service.create_sfc_resquest(this.sfc_request).subscribe((sfc_request: SfcRequest) => {
-      //   this.router.navigate(['/home']);
-      // });  
+      // console.log(this.sfc_request);
+      this.sfc_request_service.create_sfc_resquest(this.sfc_request).subscribe((sfc_request: SfcRequest) => {
+        this.router.navigate(['/home']);
+      });  
       }    
   }
 
   get_vnfs(){
     this.vnf_service.get_vnfs().subscribe((vnfs: Vnf[]) => {
-      this.vnf_list = vnfs;
+      vnfs.forEach(vnf => {
+        console.log(vnf);
+        vnf.id = vnf['id'];
+        this.vnf_list.push(vnf);
+      });       
     });
   }
 

@@ -64,6 +64,15 @@ export class InfrastructureService {
   //     )
   // }
 
+  get_infrastructure_from_monitor(): Observable<Infrastructure>{
+    return this.httpClient.get<Infrastructure>(this.server_url + '_monitor')
+      .pipe(
+        // retry(2),
+        catchError(this.handleError)
+      )
+  }
+
+  
   get_infrastructure_by_name(name: string): Observable<Infrastructure>{
     return this.httpClient.get<Infrastructure>(this.server_url + '/' + name)
       .pipe(
