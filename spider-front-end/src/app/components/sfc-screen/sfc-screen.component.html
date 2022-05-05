@@ -1,5 +1,4 @@
-<div>
-
+<div fxLayout="column" fxLayoutAlign="space-around center" >
     <mat-stepper orientation="vertical" linear #stepper_scf_creation>
         <mat-step [stepControl]="firstFormGroup" [editable]="isEditable">
           <form [formGroup]="firstFormGroup">
@@ -61,9 +60,9 @@
                 <button mat-raised-button type="submit" class="spider-button">ok</button>
             </form>
           </div>
-        </mat-step>
+        </mat-step>    
     </mat-stepper>
-
+    <mat-spinner *ngIf="showSpinner == true"></mat-spinner>
 </div>
 
 

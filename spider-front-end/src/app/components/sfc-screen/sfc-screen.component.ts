@@ -24,6 +24,7 @@ export class SfcScreenComponent implements OnInit {
   // @ViewChild(MapInfoWindow, { static: false }) infoWindow: MapInfoWindow;
 
   isEditable: boolean = true;
+  showSpinner: boolean = false;
 
   firstFormGroup: FormGroup;
   secondFormGroup: FormGroup;
@@ -33,7 +34,7 @@ export class SfcScreenComponent implements OnInit {
   formGroup: FormGroup;
   form: FormArray;
 
-  sfc_request: SfcRequest = {id: 0, name: "Teste", VNFs: [], destination: "",
+  sfc_request: SfcRequest = {_id: 0, name: "Teste", VNFs: [], destination: "",
                              source: "",flow_entries:[], 
                              requirements:{availability:0.99}};
 
@@ -43,7 +44,7 @@ export class SfcScreenComponent implements OnInit {
   infrastructure: Infrastructure;
 
   constructor(private vnf_service: VnfService, private router: Router, public dialog: MatDialog,
-              private infrastructure_service: InfrastructureService,
+              // private infrastructure_service: InfrastructureService,
               private sfc_request_service: SfcRequestService,
               private _formBuilder: FormBuilder) {}
 
@@ -110,18 +111,18 @@ export class SfcScreenComponent implements OnInit {
           }
         }        
       }
-
+      
+      this.showSpinner = true;
       this.sfc_request.flow_entries.push({
         source: this.newSteps[this.newSteps.length-1].name,
         destination: "destination",
         resources: {bandwidth: this.newSteps[this.newSteps.length-1].bandwidth, cost: 1}
       })
 
-      // console.log(this.sfc_request);
       this.sfc_request_service.create_sfc_resquest(this.sfc_request).subscribe((sfc_request: SfcRequest) => {
         this.router.navigate(['/home']);
-      });  
-      }    
+      });
+    }    
   }
 
   get_vnfs(){

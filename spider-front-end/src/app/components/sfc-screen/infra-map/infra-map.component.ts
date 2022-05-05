@@ -21,6 +21,8 @@ export class InfraMapComponent implements OnInit {
   source_name: string = "";
   destination_name: string = "";
 
+  showSpinner: boolean = true;
+
   infra_name: string = "my_infra";
   @Output() change_nodes_name_event = new EventEmitter<string[]>();
 
@@ -30,12 +32,14 @@ export class InfraMapComponent implements OnInit {
 
     let src_node: string;
     let dst_node: string;
-    
+
     // this.infrastructure_service.get_infrastructure_by_name(this.infra_name).subscribe((infrastructure: Infrastructure) => {
     this.infrastructure_service.get_infrastructure_from_monitor().subscribe((infrastructure: Infrastructure) => {
-      console.log(infrastructure)
+      // console.log(infrastructure)
+      this.showSpinner = false;
+      
       this.infrastructure = infrastructure;
-
+      
       for (let i=0; i < this.infrastructure.nodes.length; i++){
         this.nodes.push(
           {

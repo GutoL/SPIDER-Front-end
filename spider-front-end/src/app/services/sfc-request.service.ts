@@ -15,7 +15,7 @@ export class SfcRequestService {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
   }
   
-  server_url = "";
+  server_url: string;
 
   constructor(private httpClient: HttpClient) {
     this.server_url = Config.server_ip+":"+Config.server_port+"/sfc_request";
@@ -37,9 +37,8 @@ export class SfcRequestService {
   }
 
   create_sfc_resquest(sfc_request: SfcRequest): Observable<SfcRequest> {
-    console.log('sfc_request',sfc_request);
-    console.log('server url:',this.server_url);
-
+    // console.log('sfc_request',sfc_request);
+    // console.log('server url:',this.server_url);
     return this.httpClient.post<SfcRequest>(this.server_url, JSON.stringify(sfc_request), this.httpOptions)
       .pipe(
         // retry(2),
@@ -48,19 +47,20 @@ export class SfcRequestService {
   }
 
   update_sfc_resquest(sfc_request: SfcRequest): Observable<SfcRequest> {
-    return this.httpClient.put<SfcRequest>(this.server_url + '/' + sfc_request.id, JSON.stringify(sfc_request), this.httpOptions)
+    return this.httpClient.put<SfcRequest>(this.server_url + '/' + sfc_request._id, JSON.stringify(sfc_request), this.httpOptions)
       .pipe(
         retry(1),
         catchError(this.handleError)
       )
   }
 
-  delete_sfc_resquest(vnf: SfcRequest) {
-    return this.httpClient.delete<SfcRequest>(this.server_url + '/' + vnf.id, this.httpOptions)
+  delete_sfc_resquest(sfc_request: SfcRequest){
+
+    return this.httpClient.delete<SfcRequest>(this.server_url+'/'+sfc_request.name, this.httpOptions)
       .pipe(
-        retry(1),
+      retry(1),
         catchError(this.handleError)
-      )
+      )     
   }
 
   handleError(error: HttpErrorResponse) {

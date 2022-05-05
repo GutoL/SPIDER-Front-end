@@ -2,7 +2,7 @@ import { FlowEntry } from "./flow_entry";
 import { Vnf } from "./vnf";
 
 export interface SfcRequest{
-    id: number;
+    _id: number;
     name: string;
     source: string;
     destination: string;
