@@ -42,6 +42,8 @@ export class HomeComponent implements OnInit {
   get_sfcs(){
     this.sfc_request_service.get_sfc_resquests().subscribe((sfc_requests: SfcRequest[]) => {
       
+      this.sfc_request_list = [];
+
       sfc_requests.forEach(sfc_request => {
         // console.log(sfc_request);
         sfc_request._id = sfc_request['_id'];
@@ -52,8 +54,7 @@ export class HomeComponent implements OnInit {
       this.dataSource = new MatTableDataSource(this.sfc_request_list);
       
       this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;  
-      console.log(this.sfc_request_list);
+      this.dataSource.sort = this.sort;
     });
   }
 
@@ -75,7 +76,7 @@ export class HomeComponent implements OnInit {
   delete_sfc_request(sfc_request: SfcRequest){
 
     this.sfc_request_service.delete_sfc_resquest(sfc_request).subscribe(() => {
-      // this.get_vnfs();
+      this.get_sfcs();
     });
 
     // this.sfc_request_service.delete_sfc_resquest(sfc_request);

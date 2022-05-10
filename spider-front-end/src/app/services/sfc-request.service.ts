@@ -24,7 +24,7 @@ export class SfcRequestService {
   get_sfc_resquests(): Observable<SfcRequest[]>{
     return this.httpClient.get<SfcRequest[]>(this.server_url)
       .pipe(
-        retry(2),
+        retry(1),
         catchError(this.handleError))
   }
 

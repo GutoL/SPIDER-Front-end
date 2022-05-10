@@ -61,6 +61,8 @@ export class VnfCatalogComponent implements OnInit {
   get_vnfs(){
     this.vnf_service.get_vnfs().subscribe((vnfs: Vnf[]) => {
       
+      this.vnf_list = [];
+      
       vnfs.forEach(vnf => {
         console.log(vnf);
         vnf.id = vnf['id'];
