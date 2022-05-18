@@ -1,1 +1,26 @@
-<p>settings-screen works!</p>
+<div class = "content" div fxLayout="column" fxLayoutAlign="space-around center" >
+   
+    <form [formGroup]="form_settings" (ngSubmit)="onSubmit()">
+        <mat-card>
+            <mat-card-title>Server settings</mat-card-title>
+        
+            <!-- <mat-card-subtitle>Server</mat-card-subtitle> -->
+
+            <div class="column">
+                <mat-form-field>
+                    <input matInput type="text" class="form-control" id="server_ip" name="server_ip" formControlName="server_ip" placeholder="xxx.xxx.xxx.xxx"/>
+                </mat-form-field>
+            </div>
+            <div class="column">
+                <mat-form-field>
+                    <input matInput type='number' class="form-control" name="server_port" placeholder="Server port" id="server_port" formControlName="server_port"/>
+                </mat-form-field>
+            </div>                  
+        </mat-card>
+
+        <div div fxLayout="row" fxLayoutAlign="end center" >
+            <button mat-raised-button type="submit" class="spider-button new-button">ok</button>
+        </div>
+    </form>
+
+</div>

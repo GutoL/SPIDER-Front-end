@@ -3,7 +3,7 @@ import { Output, EventEmitter } from '@angular/core';
 import { Infrastructure } from 'src/app/models/infrastructure';
 import { InfrastructureService } from 'src/app/services/infrastructure.service';
 
-declare const getInfrastructureMapToSelect:any;
+declare const getInfrastructureMapToSelect: any;
 // declare const getInfrastructureMapToView:any;
 
 @Component({
@@ -91,7 +91,7 @@ export class InfraMapComponent implements OnInit {
     this.source_name = ""+document.getElementById("badgeSource")?.innerText;
     this.destination_name = ""+document.getElementById("badgeTarget")?.innerText;
 
-    this.change_nodes_name_event.emit([this.source_name,this.destination_name]);
+    this.change_nodes_name_event.emit([this.source_name, this.destination_name]);
   }
 
 }

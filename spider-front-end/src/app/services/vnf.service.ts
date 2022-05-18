@@ -3,7 +3,7 @@ import { Vnf } from '../models/vnf';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { retry, catchError } from 'rxjs/operators';
 import { Observable, throwError} from 'rxjs';
-import { Config } from '../models/config';
+import { SystemConfigService } from '../services/system-config.service';
 
 @Injectable({
   providedIn: 'root'
@@ -18,9 +18,9 @@ export class VnfService {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
   }
   
-  constructor(private httpClient: HttpClient) { 
+  constructor(private httpClient: HttpClient, private config: SystemConfigService) { 
 
-    this.server_url = Config.server_ip+":"+Config.server_port+"/vnf";
+    this.server_url = this.config.server_ip+":"+this.config.server_port+"/vnf";
     this.reset_vnf();
 
   }

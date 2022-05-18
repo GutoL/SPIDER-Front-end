@@ -165,7 +165,7 @@ function msgNormalSelectedVFN() {
   msg.style.opacity = "0";
 }
 
-function msgHiddenSelectedVFN() {
+function msgHiddenSelectedVNF() {
   var msg = document.getElementById('msg-helper-selected-vnf');
   msg.style.opacity = "1";
 }

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of, throwError} from 'rxjs';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { retry, catchError } from 'rxjs/operators';
-import { Config } from '../models/config';
+import { SystemConfigService } from '../services/system-config.service';
 import { SfcRequest } from '../models/sfc-request';
 
 @Injectable({
@@ -17,8 +17,8 @@ export class SfcRequestService {
   
   server_url: string;
 
-  constructor(private httpClient: HttpClient) {
-    this.server_url = Config.server_ip+":"+Config.server_port+"/sfc_request";
+  constructor(private httpClient: HttpClient, private config: SystemConfigService) {
+    this.server_url = this.config.server_ip+":"+this.config.server_port+"/sfc_request";
   }
 
   get_sfc_resquests(): Observable<SfcRequest[]>{

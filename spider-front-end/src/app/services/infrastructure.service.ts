@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { ComponentFactoryResolver, Injectable } from '@angular/core';
-import { Config } from '../models/config';
+import { SystemConfigService } from '../services/system-config.service';
 import { retry, catchError } from 'rxjs/operators';
 import { Observable, throwError} from 'rxjs';
 import { Infrastructure } from '../models/infrastructure';
@@ -45,8 +45,8 @@ export class InfrastructureService {
     });    
   }
 
-  constructor(private httpClient: HttpClient) {
-    this.server_url = Config.server_ip+":"+Config.server_port+"/infra";
+  constructor(private httpClient: HttpClient, private config: SystemConfigService) {
+    this.server_url = this.config.server_ip+":"+this.config.server_port+"/infra";
   }
 
   get_all_infrastructures(): Observable<Infrastructure[]>{

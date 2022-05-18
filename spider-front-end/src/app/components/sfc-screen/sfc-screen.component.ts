@@ -113,6 +113,7 @@ export class SfcScreenComponent implements OnInit {
       }
       
       this.showSpinner = true;
+      
       this.sfc_request.flow_entries.push({
         source: this.newSteps[this.newSteps.length-1].name,
         destination: "destination",
