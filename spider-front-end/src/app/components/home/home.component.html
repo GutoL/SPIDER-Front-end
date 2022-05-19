@@ -24,7 +24,8 @@
                         </button> 
                     </div>
 
-                    <div  *ngIf="column == 'delete' " class="spider-purple" (click)="delete_sfc_request(element)"> 
+                    <!-- <div  *ngIf="column == 'delete' " class="spider-purple" (click)="delete_sfc_request(element)">  -->
+                    <div  *ngIf="column == 'delete' " class="spider-purple" (click)="open_dialog(element)"> 
                         <button mat-button>
                             <mat-icon aria-hidden="false">delete</mat-icon>
                         </button> 

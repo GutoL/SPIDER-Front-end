@@ -6,6 +6,8 @@ import {MatSort} from '@angular/material/sort';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import { Router } from '@angular/router';
 import {MatTableDataSource} from '@angular/material/table';
+import { MatDialog } from '@angular/material/dialog';
+import { DialogComponent } from '../dialog/dialog.component';
 
 declare const getInfrastructureMapToView:any;
 
@@ -33,7 +35,7 @@ export class HomeComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  constructor(private router: Router, private sfc_request_service: SfcRequestService) { }
+  constructor(private router: Router, private sfc_request_service: SfcRequestService, public dialog: MatDialog) { }
 
   ngOnInit(): void {
     this.get_sfcs();    
@@ -71,7 +73,19 @@ export class HomeComponent implements OnInit {
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
-}
+  }
+
+  open_dialog(sfc_request: SfcRequest) {
+    const dialogRef = this.dialog.open(DialogComponent);
+
+    dialogRef.afterClosed().subscribe(result => {
+
+      if (result == true){
+        this.delete_sfc_request(sfc_request);
+      } 
+
+    });
+  }
 
   delete_sfc_request(sfc_request: SfcRequest){
 
@@ -79,7 +93,6 @@ export class HomeComponent implements OnInit {
       this.get_sfcs();
     });
 
-    // this.sfc_request_service.delete_sfc_resquest(sfc_request);
   }
 
 }

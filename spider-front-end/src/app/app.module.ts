@@ -33,6 +33,7 @@ import {MatGridListModule} from '@angular/material/grid-list';
 import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import { AddVnfsStepperComponent } from './components/sfc-screen/add-vnfs-stepper/add-vnfs-stepper.component';
 import { InfraMapComponent } from './components/sfc-screen/infra-map/infra-map.component';
+import { DialogComponent } from './components/dialog/dialog.component';
 
 @NgModule({
   declarations: [
@@ -46,7 +47,8 @@ import { InfraMapComponent } from './components/sfc-screen/infra-map/infra-map.c
     FooterComponent,
     ReplaceNodeDialogComponent,
     AddVnfsStepperComponent,
-    InfraMapComponent
+    InfraMapComponent,
+    DialogComponent
   ],
   imports: [
     BrowserModule,

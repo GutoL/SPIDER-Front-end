@@ -6,7 +6,8 @@ import { Vnf } from 'src/app/models/vnf';
 import {animate, state, style, transition, trigger} from '@angular/animations';
 import { Router } from '@angular/router';
 import { VnfService } from 'src/app/services/vnf.service';
-
+import { MatDialog } from '@angular/material/dialog';
+import { DialogComponent } from '../dialog/dialog.component';
 
 @Component({
   selector: 'app-vnf-catalog',
@@ -32,7 +33,7 @@ export class VnfCatalogComponent implements OnInit {
   expand: boolean = false;
   vnf_list: Vnf[] = [];
 
-  constructor(private router: Router, private vnf_service: VnfService) {
+  constructor(private router: Router, private vnf_service: VnfService, public dialog: MatDialog) {
   }
 
   ngOnInit(): void {
@@ -86,6 +87,20 @@ export class VnfCatalogComponent implements OnInit {
     this.vnf_service.vnf_to_update = vnf;
     this.router.navigate(['/create_vnf']);
   }
+
+
+  open_dialog(vnf: Vnf) {
+    const dialogRef = this.dialog.open(DialogComponent);
+
+    dialogRef.afterClosed().subscribe(result => {
+
+      if (result == true){
+        this.delete_vnf(vnf);
+      } 
+
+    });
+  }
+
 
   delete_vnf(vnf: Vnf){
     this.vnf_service.delete_vnf(vnf).subscribe(() => {
